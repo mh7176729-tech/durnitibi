@@ -1,0 +1,6 @@
+{
+  "name": "দুর্নীতির বিরুদ্ধে নিউজ - Durniti Biruddhe News",
+  "description": "Professional Digital News Portal focusing on investigative journalism, corruption, governance, and national and international news in Bangla and English.",
+  "requestFramePermissions": ["notifications"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

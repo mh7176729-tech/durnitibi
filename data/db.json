@@ -1,0 +1,1782 @@
+{
+  "users": [
+    {
+      "id": "user-admin-1",
+      "name": "মুহাম্মদ হাসনাত (প্রধান সম্পাদক)",
+      "email": "admin@durniti.news",
+      "role": "Super Admin",
+      "isActive": true,
+      "createdAt": "2026-09-08T12:55:48.190Z",
+      "passwordHash": "740516e9d2a2ea36e5aadef90ce956ca:35b3622d5156c7b3d6fe30e7249ad469539d4738870dec0bd47bae2577419df922a246d477e84a16688ee07391750193e0923d6acdde3443c41f904bc2ecff4c"
+    }
+  ],
+  "news": [
+    {
+      "id": "news-1",
+      "titleBn": "মেগা প্রকল্পে শতকোটি টাকার বালু ভরাট অনিয়ম: অনুসন্ধান দল গঠিত",
+      "titleEn": "Multi-Million Dollar Irregularities in Mega Project Sand Filling: Probe Body Formed",
+      "shortDescBn": "নদী শাসন ও বাঁধ রক্ষা প্রকল্পে নির্ধারিত পরিমাণের চেয়ে তিনগুণ অতিরিক্ত ব্যয় দেখিয়ে অর্থ আত্মসাতের অভিযোগ উঠেছে ঠিকাদারি চক্রের বিরুদ্ধে।",
+      "shortDescEn": "Allegations of embezzling funds by billing triple the sand volume in river management and embankment protection project.",
+      "contentBn": "<p><strong>বিশেষ অনুসন্ধান ডেস্ক:</strong> দেশের গুরুত্বপূর্ণ নদী শাসন ও উপকূলীয় প্রতিরক্ষা প্রকল্পে বালু ভরাটের নামে শতকোটি টাকা নয়ছয়ের প্রমাণ মিলেছে প্রাথমিক নিরীক্ষায়। স্থানীয় সচেতন মহলের দীর্ঘদিনের অভিযোগের পরিপ্রেক্ষিতে সেতু ও পানিসম্পদ মন্ত্রণালয়ের এক যৌথ আদেশে তিন সদস্যবিশিষ্ট উচ্চপর্যায়ের তদন্ত কমিটি গঠন করা হয়েছে।</p>\n<h3>অনুসন্ধানে যা জানা গেছে</h3>\n<p>আমাদের বিশেষ অনুসন্ধান দলের অনুসন্ধানে দেখা গেছে, প্রকল্পের প্রথম ধাপে চরফ্যাশন ও দৌলতখান অংশে মোট ৮০ লাখ ঘনমিটার ড্রেজিং ও বালু ভরাটের কার্যাদেশ দেওয়া হয়েছিল। তবে ডিজিটাল হাইড্রোম্যাট্রিক ও জিও-ট্যাগিং সার্ভেতে দেখা যায়, বাস্তবে কাজ হয়েছে মাত্র ২৪ লাখ ঘনমিটার। বাকি অর্থ ভুয়া ভাউচার ও প্রকল্প কর্মকর্তাদের যোগসাজশে খালাস করে নেওয়া হয়েছে।</p>\n<blockquote>\"জনগণের করের টাকায় মেগা প্রকল্প হয়। সেখানে এক ছটাক অনিয়মও বরদাশত করা হবে না। দোষী যেই হোক, আইনানুগ কঠোর ব্যবস্থা নেওয়া হবে।\" — প্রকল্প তদারকি কর্মকর্তা</blockquote>\n<h3>সংশ্লিষ্ট কর্তৃপক্ষের বক্তব্য ও প্রতিক্রিয়া</h3>\n<p>অভিযুক্ত ঠিকাদারি প্রতিষ্ঠান 'প্রাইম বিল্ডার্স'-এর প্রকল্প পরিচালকের সঙ্গে যোগাযোগ করা হলে তিনি অনিয়মের অভিযোগ অস্বীকার করে জানান, \"জোয়ার-ভাটার কারণে অনেক বালু নদীগর্ভে তলিয়ে যেতে পারে। আমাদের সব নথিপত্র অডিট দপ্তরে জমা দেওয়া হয়েছে এবং আমরা তদন্ত কমিটিকে পূর্ণ সহযোগিতা করব।\"</p>",
+      "contentEn": "<p><strong>Special Investigation Desk:</strong> Preliminary audits have revealed evidence of misappropriation of hundreds of millions of takas under the guise of sand filling in river management and coastal defense projects. Following prolonged citizen complaints, a three-member high-level inquiry committee was formed.</p>\n<h3>What the Investigation Revealed</h3>\n<p>Field investigations in Charfasson and Daulatkhan showed that while 8 million cubic meters of dredging and filling was billed, digital hydrometric survey revealed only 2.4 million cubic meters were actually deployed.</p>\n<blockquote>\"Mega projects are funded by public tax money. No corruption will be tolerated.\" — Monitoring Official</blockquote>\n<h3>Statement of the Accused Party</h3>\n<p>When approached, the Project Director of accused firm Prime Builders denied wrongdoing: \"Tidal currents might wash away sand. All paperwork is submitted to the audit department, and we will cooperate fully with the investigation.\"</p>",
+      "featuredImage": "https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=1200&q=80",
+      "categoryId": "investigative",
+      "categoryNameBn": "অনুসন্ধানী প্রতিবেদন",
+      "categoryNameEn": "Investigative Report",
+      "country": "Bangladesh",
+      "division": "বরিশাল বিভাগ",
+      "district": "ভোলা জেলা",
+      "upazila": "চরফ্যাশন",
+      "reporterName": "ফারুক আহমেদ ভূঁইয়া",
+      "reporterId": "REP-102",
+      "source": "ডিজিটাল অনুসন্ধান সেল",
+      "tags": [
+        "দুর্নীতি",
+        "মেগা প্রকল্প",
+        "বালু ভরাট",
+        "তদন্ত",
+        "চরফ্যাশন"
+      ],
+      "publishDate": "2026-09-08",
+      "publishTime": "10:30",
+      "updatedAt": "2026-09-08 11:15",
+      "isBreaking": true,
+      "isFeatured": true,
+      "isPopular": true,
+      "seoTitle": "মেগা প্রকল্পে শতকোটি টাকার বালু ভরাট অনিয়ম | দুর্নীতির বিরুদ্ধে নিউজ",
+      "seoDescription": "ভোলা জেলার চরফ্যাশনে নদী শাসন প্রকল্পের বালু ভরাটে শতকোটি টাকার গরমিল উদঘাটন।",
+      "seoKeywords": "দুর্নীতি, অনুসন্ধান, ভোলা, নদী শাসন",
+      "slug": "mega-project-sand-filling-irregularities-charfasson",
+      "status": "Published",
+      "viewCount": 14250,
+      "shareCount": 1840,
+      "accusedStatement": "ঠিকাদারি প্রতিষ্ঠান জানিয়েছে, জোয়ার-ভাটার কারণে বালু ধুয়ে গেছে এবং তারা নিরপেক্ষ পরিমাপ মেনে নিতে প্রস্তুত।",
+      "isFactChecked": true
+    },
+    {
+      "id": "news-2",
+      "titleBn": "হাসপাতালের চিকিৎসা সরঞ্জাম ক্রয়ে পুকুরচুরি: ৩ কর্মকর্তা বরখাস্ত",
+      "titleEn": "Procurement Scam in Hospital Medical Equipment: 3 Officers Suspended",
+      "shortDescBn": "বাজারদরের চেয়ে ৫ গুণ বেশি দামে আইসিইউ ভেন্টিলেটর ও অ্যানালাইজার মেশিন কেনার দায়ে স্বাস্থ্য অধিদপ্তরের তিন কর্মকর্তাকে সাময়িক বরখাস্ত করা হয়েছে।",
+      "shortDescEn": "Three health directorate officials suspended for purchasing ICU ventilators and analyzers at five times the market price.",
+      "contentBn": "<p><strong>ষ্টাফ রিপোর্টার:</strong> সরকারি মেডিকেল কলেজ হাসপাতালের জন্য অত্যাধুনিক ডায়াগনস্টিক মেশিন ও আইসিইউ সরঞ্জাম ক্রয়ে নজিরবিহীন দুর্নীতির অভিযোগে স্বাস্থ্য মন্ত্রণালয় কঠোর পদক্ষেপ গ্রহণ করেছে। অডিট তদন্তে প্রমাণিত হয়েছে যে, প্রতি সেট যন্ত্রপাতির দর আন্তর্জাতিক মূল্যের চেয়ে প্রায় পাঁচ গুণ বাড়িয়ে বিল পরিশোধ করা হয়েছিল।</p>\n<h3>যন্ত্রপাতি কেনা হলেও প্যাকেটে ধুলোবালি</h3>\n<p>সরেজমিনে গিয়ে দেখা গেছে, ক্রয় করা ৪টি ডিজিটাল এক্স-রে ও ১২টি ভেন্টিলেটর গত দেড় বছর ধরে অবিক্রিত বাক্সে হাসপাতালের স্টোর রুমে পড়ে আছে। এগুলো স্থাপন ও পরিচালনার জন্য কোনো প্রশিক্ষণ বা বিশেষজ্ঞ টেকনিশিয়ান নিয়োগ দেওয়া হয়নি।</p>",
+      "contentEn": "<p><strong>Staff Reporter:</strong> The Ministry of Health took decisive disciplinary action after an unprecedented procurement scandal surfaced regarding diagnostic equipment and ICU gears. Audit showed prices inflated 500% compared to international market benchmarks.</p>",
+      "featuredImage": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80",
+      "categoryId": "corruption",
+      "categoryNameBn": "দুর্নীতি",
+      "categoryNameEn": "Corruption",
+      "country": "Bangladesh",
+      "division": "ঢাকা বিভাগ",
+      "district": "ঢাকা জেলা",
+      "upazila": "ধানমন্ডি",
+      "reporterName": "নাজমুন নাহার রিক্তা",
+      "reporterId": "REP-105",
+      "source": "স্বাস্থ্য বিট",
+      "tags": [
+        "স্বাস্থ্য খাত",
+        "মেডিকেল সরঞ্জাম",
+        "অনিয়ম",
+        "আইসিইউ"
+      ],
+      "publishDate": "2026-09-08",
+      "publishTime": "08:45",
+      "isBreaking": true,
+      "isFeatured": true,
+      "isPopular": true,
+      "slug": "hospital-equipment-procurement-scam",
+      "status": "Published",
+      "viewCount": 9820,
+      "shareCount": 650,
+      "accusedStatement": "সংশ্লিষ্ট সরবরাহকারী দাবি করেছে, আন্তর্জাতিক শিপিং ও কাস্টমস ডিউটির কারণে ব্যয় বৃদ্ধি পেয়েছিল।",
+      "isFactChecked": true
+    },
+    {
+      "id": "news-3",
+      "titleBn": "ব্যাংকিং খাতে ঋণ জালিয়াতি বন্ধে কেন্দ্রীয় ব্যাংকের নতুন কড়া নীতিমালা",
+      "titleEn": "Central Bank Issues Strict Regulations to Halt Loan Fraud in Banking Sector",
+      "shortDescBn": "ভুয়া মর্টগেজ ও বেনামি কোম্পানির নামে ঋণ গ্রহণ ঠেকাতে বায়োমেট্রিক ও ডিজিটাল জাতীয় পরিচয়পত্র যাচাই বাধ্যতামূলক করা হলো।",
+      "shortDescEn": "Biometric and National ID digital verification made mandatory to stop fake mortgage and shell company loans.",
+      "contentBn": "<p><strong>অর্থনীতি প্রতিবেদক:</strong> দেশের বাণিজ্যিক ব্যাংকগুলোতে খেলাপি ঋণের লাগাম টানতে এবং বেনামি কোম্পানির নামে অর্থ সরিয়ে নেওয়া বন্ধে এক যুগান্তকারী মাস্টার সার্কুলার জারি করেছে বাংলাদেশ ব্যাংক। নতুন নিয়ম অনুসারে ৫ কোটি টাকার ঊর্ধ্বের যে কোনো ঋণ প্রস্তাবে তিনটি স্বতন্ত্র অডিট ফার্মের ক্লিয়ারেন্স নিশ্চিত করতে হবে।</p>",
+      "contentEn": "<p><strong>Economy Reporter:</strong> In a landmark regulatory step, Bangladesh Bank has mandated three independent audit verifications for any loan exceeding 50 million BDT to curb non-performing loans and fraudulent shell entities.</p>",
+      "featuredImage": "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=1200&q=80",
+      "categoryId": "economy",
+      "categoryNameBn": "অর্থনীতি",
+      "categoryNameEn": "Economy",
+      "country": "Bangladesh",
+      "division": "ঢাকা বিভাগ",
+      "district": "ঢাকা জেলা",
+      "upazila": "মতিঝিল",
+      "reporterName": "কবির হোসেন তালুকদার",
+      "reporterId": "REP-110",
+      "source": "বাংলাদেশ ব্যাংক",
+      "tags": [
+        "বাংলাদেশ ব্যাংক",
+        "খেলাপি ঋণ",
+        "অর্থনীতি",
+        "ব্যাংক"
+      ],
+      "publishDate": "2026-09-07",
+      "publishTime": "18:20",
+      "isBreaking": false,
+      "isFeatured": true,
+      "isPopular": true,
+      "slug": "central-bank-strict-regulations-loan-fraud",
+      "status": "Published",
+      "viewCount": 12400,
+      "shareCount": 820,
+      "isFactChecked": true
+    },
+    {
+      "id": "news-4",
+      "titleBn": "উপকূলীয় অঞ্চলে লবণাক্ততা সহনশীল ধানের বাম্পার ফলন: কৃষকদের মুখে হাসি",
+      "titleEn": "Bumper Yield of Salinity-Tolerant Paddy in Coastal Belt Brings Joy to Farmers",
+      "shortDescBn": "কৃষি বিজ্ঞানীদের উদ্ভাবিত নতুন জাতের ব্রি ধান-১০৭ চাষ করে দক্ষিণাঞ্চলের কৃষকরা লাভবান হচ্ছেন।",
+      "shortDescEn": "Farmers in southern coastal areas reap profits cultivating new BRRI-107 salinity-tolerant rice variety.",
+      "contentBn": "<p><strong>কৃষি ডেস্ক:</strong> জলবায়ু পরিবর্তনের কারণে লবণাক্ততায় আক্রান্ত জমিতেও এবার ফলনের নতুন রেকর্ড তৈরি হয়েছে। সাতক্ষীরা ও খুলনার উপকূলীয় অঞ্চলে লবণাক্ততা সহনশীল নতুন ধানের পরীক্ষামূলক চাষে প্রতি হেক্টরে সাড়ে ৭ টন ফলন পাওয়া গেছে।</p>",
+      "contentEn": "<p><strong>Agri Desk:</strong> Coastal farmers in Satkhira and Khulna are celebrating record yields with salinity-resilient BRRI-107 paddy varieties even amid climate pressures.</p>",
+      "featuredImage": "https://images.unsplash.com/photo-1586771107445-d3ca888129ff?auto=format&fit=crop&w=1200&q=80",
+      "categoryId": "agriculture",
+      "categoryNameBn": "কৃষি",
+      "categoryNameEn": "Agriculture",
+      "country": "Bangladesh",
+      "division": "খুলনা বিভাগ",
+      "district": "সাতক্ষীরা জেলা",
+      "upazila": "শ্যামনগর",
+      "reporterName": "আনিসুল হক বাবলু",
+      "reporterId": "REP-114",
+      "source": "কৃষি সম্প্রসারণ অধিদপ্তর",
+      "tags": [
+        "কৃষি",
+        "ধান চাষ",
+        "লবণাক্ততা",
+        "শ্যামনগর"
+      ],
+      "publishDate": "2026-09-07",
+      "publishTime": "15:10",
+      "isBreaking": false,
+      "isFeatured": false,
+      "isPopular": false,
+      "slug": "bumper-salinity-tolerant-rice-yield-coastal-belt",
+      "status": "Published",
+      "viewCount": 4320,
+      "shareCount": 290,
+      "isFactChecked": true
+    },
+    {
+      "id": "news-5",
+      "titleBn": "সাইবার অপরাধীদের আন্তর্জাতিক চক্র গ্রেপ্তার: উদ্ধার কোটি টাকার ডিভাইস",
+      "titleEn": "International Cyber Crime Syndicate Busted: Tech Devices Worth Millions Seized",
+      "shortDescBn": "মোবাইল ব্যাংকিং ও সামাজিক যোগাযোগমাধ্যমে প্রতারণার অভিযোগে ৬ জনকে যৌথ অভিযানে গ্রেপ্তার করেছে পুলিশ।",
+      "shortDescEn": "Police arrested 6 suspects in a joint operation targeting mobile banking frauds and digital extortion networks.",
+      "contentBn": "<p><strong>অপরাধ প্রতিবেদক:</strong> সাধারণ মানুষকে ডিজিটাল ফাঁদে ফেলে কোটি টাকা হাতিয়ে নেওয়া একটি সংঘবদ্ধ সাইবার অপরাধী চক্রকে গ্রেপ্তার করেছে আইন প্রয়োগকারী সংস্থা। তাদের কাছ থেকে শতাধিক সিম কার্ড, সার্ভার ইউনিট ও অত্যাধুনিক সফটওয়্যার উদ্ধার করা হয়েছে।</p>",
+      "contentEn": "<p><strong>Crime Reporter:</strong> Law enforcement dismantled a digital extortion syndicate, recovering hundreds of illegal SIM cards, server rigs, and hacking equipment.</p>",
+      "featuredImage": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80",
+      "categoryId": "crime",
+      "categoryNameBn": "অপরাধ",
+      "categoryNameEn": "Crime",
+      "country": "Bangladesh",
+      "division": "চট্টগ্রাম বিভাগ",
+      "district": "চট্টগ্রাম জেলা",
+      "upazila": "কোতোয়ালী",
+      "reporterName": "সঞ্জীব চৌধুরী",
+      "reporterId": "REP-118",
+      "source": "সিআইডি সাইবার ইউনিট",
+      "tags": [
+        "সাইবার ক্রাইম",
+        "প্রতারণা",
+        "গ্রেপ্তার",
+        "চট্টগ্রাম"
+      ],
+      "publishDate": "2026-09-06",
+      "publishTime": "21:00",
+      "isBreaking": false,
+      "isFeatured": false,
+      "isPopular": true,
+      "slug": "international-cyber-crime-syndicate-busted",
+      "status": "Published",
+      "viewCount": 8750,
+      "shareCount": 420,
+      "isFactChecked": true
+    },
+    {
+      "id": "news-6",
+      "titleBn": "কৃত্রিম বুদ্ধিমত্তা ও ডেটা সুরক্ষায় নতুন জাতীয় আইনের খসড়া প্রকাশ",
+      "titleEn": "Draft of National AI and Data Protection Act Released for Public Consultation",
+      "shortDescBn": "নাগরিকের ব্যক্তিগত ডেটার গোপনীয়তা লঙ্ঘন করলে সর্বোচ্চ ৫ কোটি টাকা জরিমানা ও জেলের বিধান রাখা হয়েছে।",
+      "shortDescEn": "Draft legislation proposes up to 50M BDT fine and prison terms for unauthorized data harvesting and AI abuses.",
+      "contentBn": "<p><strong>প্রযুক্তি প্রতিনিধি:</strong> চতুর্থ শিল্পবিপ্লবের চ্যালেঞ্জ মোকাবিলা এবং জনগণের ব্যক্তিগত ডেটার নিরাপত্তা নিশ্চিত করতে বহুল প্রতীক্ষিত 'জাতীয় উপাত্ত সুরক্ষা ও এআই নীতিমালা ২০২৬'-এর খসড়া জনমত যাচাইয়ের জন্য প্রকাশ করা হয়েছে।</p>",
+      "contentEn": "<p><strong>Tech Desk:</strong> The government has unveiled the public draft for the National AI and Data Protection Act 2026, creating safeguards against digital breaches and unregulated automated surveillance.</p>",
+      "featuredImage": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80",
+      "categoryId": "tech",
+      "categoryNameBn": "প্রযুক্তি",
+      "categoryNameEn": "Technology",
+      "country": "Bangladesh",
+      "division": "ঢাকা বিভাগ",
+      "district": "ঢাকা জেলা",
+      "upazila": "গুলশান",
+      "reporterName": "তানভীর আহমেদ শুভ",
+      "reporterId": "REP-122",
+      "source": "আইসিটি মন্ত্রণালয়",
+      "tags": [
+        "প্রযুক্তি",
+        "কৃত্রিম বুদ্ধিমত্তা",
+        "সাইবার নিরাপত্তা"
+      ],
+      "publishDate": "2026-09-06",
+      "publishTime": "12:00",
+      "isBreaking": false,
+      "isFeatured": true,
+      "isPopular": false,
+      "slug": "national-ai-and-data-protection-act-draft",
+      "status": "Published",
+      "viewCount": 6510,
+      "shareCount": 510,
+      "isFactChecked": true
+    },
+    {
+      "id": "news-7",
+      "titleBn": "বিশ্ববাজারে জ্বালানি তেলের দাম কমে সর্বনিম্ন, কমতে পারে অভ্যন্তরীণ পরিবহন খরচ",
+      "titleEn": "Global Crude Oil Prices Drop to Multi-Month Low, Domestic Transport Costs Likely to Ease",
+      "shortDescBn": "আন্তর্জাতিক সরবরাহ বৃদ্ধি ও ভূরাজনৈতিক উত্তেজনা হ্রাসের প্রভাবে ব্যারেলপ্রতি ব্রেন্ট ক্রুডের দর নেমেছে ৬৭ ডলারে।",
+      "shortDescEn": "Brent crude touches $67 per barrel as global supply improves, offering relief to import-dependent economies.",
+      "contentBn": "<p><strong>আন্তর্জাতিক বাণিজ্য ডেস্ক:</strong> বিশ্ববাজারে অপরিশোধিত জ্বালানি তেলের দামে বড় দরপতন লক্ষ্য করা গেছে। টানা তিন সপ্তাহ ধরে দর কমে ব্যারেলপ্রতি ব্রেন্ট ক্রুডের মূল্য ৬৭ মার্কিন ডলারে এসে ঠেকেছে, যা বিগত ১৪ মাসের মধ্যে সর্বনিম্ন।</p>",
+      "contentEn": "<p><strong>International Desk:</strong> Global crude oil prices tumbled to a 14-month low, with Brent benchmark hitting $67 per barrel, creating fiscal headroom for developing economies.</p>",
+      "featuredImage": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80",
+      "categoryId": "international",
+      "categoryNameBn": "আন্তর্জাতিক",
+      "categoryNameEn": "International",
+      "country": "International",
+      "reporterName": "রফিকুল ইসলাম কায়সার",
+      "reporterId": "REP-130",
+      "source": "রয়টার্স ও আন্তর্জাতিক জ্বালানি সংস্থা",
+      "tags": [
+        "জ্বালানি তেল",
+        "আন্তর্জাতিক",
+        "তেলের বাজার"
+      ],
+      "publishDate": "2026-09-05",
+      "publishTime": "17:30",
+      "isBreaking": false,
+      "isFeatured": false,
+      "isPopular": true,
+      "slug": "global-crude-oil-prices-drop-international",
+      "status": "Published",
+      "viewCount": 11100,
+      "shareCount": 770,
+      "isFactChecked": true
+    }
+  ],
+  "categories": [
+    {
+      "id": "corruption",
+      "nameBn": "দুর্নীতি",
+      "nameEn": "Corruption",
+      "slug": "corruption",
+      "order": 1,
+      "isActive": true
+    },
+    {
+      "id": "investigative",
+      "nameBn": "অনুসন্ধানী প্রতিবেদন",
+      "nameEn": "Investigative Report",
+      "slug": "investigative",
+      "order": 2,
+      "isActive": true
+    },
+    {
+      "id": "bangladesh",
+      "nameBn": "বাংলাদেশ",
+      "nameEn": "Bangladesh",
+      "slug": "bangladesh",
+      "order": 3,
+      "isActive": true
+    },
+    {
+      "id": "politics",
+      "nameBn": "রাজনীতি",
+      "nameEn": "Politics",
+      "slug": "politics",
+      "order": 4,
+      "isActive": true
+    },
+    {
+      "id": "crime",
+      "nameBn": "অপরাধ",
+      "nameEn": "Crime",
+      "slug": "crime",
+      "order": 5,
+      "isActive": true
+    },
+    {
+      "id": "administration",
+      "nameBn": "প্রশাসন",
+      "nameEn": "Administration",
+      "slug": "administration",
+      "order": 6,
+      "isActive": true
+    },
+    {
+      "id": "economy",
+      "nameBn": "অর্থনীতি",
+      "nameEn": "Economy",
+      "slug": "economy",
+      "order": 7,
+      "isActive": true
+    },
+    {
+      "id": "business",
+      "nameBn": "ব্যবসা-বাণিজ্য",
+      "nameEn": "Business",
+      "slug": "business",
+      "order": 8,
+      "isActive": true
+    },
+    {
+      "id": "law-justice",
+      "nameBn": "আইন ও বিচার",
+      "nameEn": "Law & Justice",
+      "slug": "law-justice",
+      "order": 9,
+      "isActive": true
+    },
+    {
+      "id": "education",
+      "nameBn": "শিক্ষা",
+      "nameEn": "Education",
+      "slug": "education",
+      "order": 10,
+      "isActive": true
+    },
+    {
+      "id": "health",
+      "nameBn": "স্বাস্থ্য",
+      "nameEn": "Health",
+      "slug": "health",
+      "order": 11,
+      "isActive": true
+    },
+    {
+      "id": "tech",
+      "nameBn": "প্রযুক্তি",
+      "nameEn": "Technology",
+      "slug": "technology",
+      "order": 12,
+      "isActive": true
+    },
+    {
+      "id": "society",
+      "nameBn": "সমাজ",
+      "nameEn": "Society",
+      "slug": "society",
+      "order": 13,
+      "isActive": true
+    },
+    {
+      "id": "jobs",
+      "nameBn": "চাকরি",
+      "nameEn": "Jobs",
+      "slug": "jobs",
+      "order": 14,
+      "isActive": true
+    },
+    {
+      "id": "agriculture",
+      "nameBn": "কৃষি",
+      "nameEn": "Agriculture",
+      "slug": "agriculture",
+      "order": 15,
+      "isActive": true
+    },
+    {
+      "id": "expatriate",
+      "nameBn": "প্রবাস",
+      "nameEn": "Expatriate",
+      "slug": "expatriate",
+      "order": 16,
+      "isActive": true
+    },
+    {
+      "id": "sports",
+      "nameBn": "খেলাধুলা",
+      "nameEn": "Sports",
+      "slug": "sports",
+      "order": 17,
+      "isActive": true
+    },
+    {
+      "id": "entertainment",
+      "nameBn": "বিনোদন",
+      "nameEn": "Entertainment",
+      "slug": "entertainment",
+      "order": 18,
+      "isActive": true
+    },
+    {
+      "id": "opinion",
+      "nameBn": "মতামত",
+      "nameEn": "Opinion",
+      "slug": "opinion",
+      "order": 19,
+      "isActive": true
+    },
+    {
+      "id": "international",
+      "nameBn": "আন্তর্জাতিক",
+      "nameEn": "International",
+      "slug": "international",
+      "order": 20,
+      "isActive": true
+    },
+    {
+      "id": "others",
+      "nameBn": "অন্যান্য",
+      "nameEn": "Others",
+      "slug": "others",
+      "order": 21,
+      "isActive": true
+    }
+  ],
+  "locations": [
+    {
+      "id": "dhaka",
+      "nameBn": "ঢাকা বিভাগ",
+      "nameEn": "Dhaka Division",
+      "districts": [
+        {
+          "id": "dhaka-dist",
+          "nameBn": "ঢাকা জেলা",
+          "nameEn": "Dhaka District",
+          "upazilas": [
+            {
+              "id": "dhanmondi",
+              "nameBn": "ধানমন্ডি",
+              "nameEn": "Dhanmondi"
+            },
+            {
+              "id": "gulshan",
+              "nameBn": "গুলশান",
+              "nameEn": "Gulshan"
+            },
+            {
+              "id": "mirpur",
+              "nameBn": "মিরপুর",
+              "nameEn": "Mirpur"
+            },
+            {
+              "id": "motijheel",
+              "nameBn": "মতিঝিল",
+              "nameEn": "Motijheel"
+            },
+            {
+              "id": "uttara",
+              "nameBn": "উত্তরা",
+              "nameEn": "Uttara"
+            },
+            {
+              "id": "savar",
+              "nameBn": "সাভার",
+              "nameEn": "Savar"
+            },
+            {
+              "id": "dhamrai",
+              "nameBn": "ধামরাই",
+              "nameEn": "Dhamrai"
+            },
+            {
+              "id": "keraniganj",
+              "nameBn": "কেরানীগঞ্জ",
+              "nameEn": "Keraniganj"
+            },
+            {
+              "id": "nawabganj",
+              "nameBn": "নবাবগঞ্জ",
+              "nameEn": "Nawabganj"
+            },
+            {
+              "id": "dohar",
+              "nameBn": "দোহার",
+              "nameEn": "Dohar"
+            }
+          ]
+        },
+        {
+          "id": "gazipur",
+          "nameBn": "গাজীপুর জেলা",
+          "nameEn": "Gazipur District",
+          "upazilas": [
+            {
+              "id": "gazipur-sadar",
+              "nameBn": "গাজীপুর সদর",
+              "nameEn": "Gazipur Sadar"
+            },
+            {
+              "id": "kaliakair",
+              "nameBn": "কালিয়াকৈর",
+              "nameEn": "Kaliakair"
+            },
+            {
+              "id": "kapasia",
+              "nameBn": "কাপাসিয়া",
+              "nameEn": "Kapasia"
+            },
+            {
+              "id": "sreepur",
+              "nameBn": "শ্রীপুর",
+              "nameEn": "Sreepur"
+            },
+            {
+              "id": "kaliganj-g",
+              "nameBn": "কালীগঞ্জ",
+              "nameEn": "Kaliganj"
+            }
+          ]
+        },
+        {
+          "id": "narayanganj",
+          "nameBn": "নারায়ণগঞ্জ জেলা",
+          "nameEn": "Narayanganj District",
+          "upazilas": [
+            {
+              "id": "narayanganj-sadar",
+              "nameBn": "নারায়ণগঞ্জ সদর",
+              "nameEn": "Narayanganj Sadar"
+            },
+            {
+              "id": "bandar",
+              "nameBn": "বন্দর",
+              "nameEn": "Bandar"
+            },
+            {
+              "id": "rupganj",
+              "nameBn": "রূপগঞ্জ",
+              "nameEn": "Rupganj"
+            },
+            {
+              "id": "sonargaon",
+              "nameBn": "সোনারগাঁও",
+              "nameEn": "Sonargaon"
+            },
+            {
+              "id": "araihazar",
+              "nameBn": "আড়াইহাজার",
+              "nameEn": "Araihazar"
+            }
+          ]
+        },
+        {
+          "id": "tangail",
+          "nameBn": "টাঙ্গাইল জেলা",
+          "nameEn": "Tangail District",
+          "upazilas": [
+            {
+              "id": "tangail-sadar",
+              "nameBn": "টাঙ্গাইল সদর",
+              "nameEn": "Tangail Sadar"
+            },
+            {
+              "id": "mirzapur",
+              "nameBn": "মির্জাপুর",
+              "nameEn": "Mirzapur"
+            },
+            {
+              "id": "ghatail",
+              "nameBn": "ঘাটাইল",
+              "nameEn": "Ghatail"
+            },
+            {
+              "id": "madhupur",
+              "nameBn": "মধুপুর",
+              "nameEn": "Madhupur"
+            },
+            {
+              "id": "kalihati",
+              "nameBn": "কালিহাতী",
+              "nameEn": "Kalihati"
+            }
+          ]
+        },
+        {
+          "id": "faridpur",
+          "nameBn": "ফরিদপুর জেলা",
+          "nameEn": "Faridpur District",
+          "upazilas": [
+            {
+              "id": "faridpur-sadar",
+              "nameBn": "ফরিদপুর সদর",
+              "nameEn": "Faridpur Sadar"
+            },
+            {
+              "id": "boalmari",
+              "nameBn": "বোয়ালমারী",
+              "nameEn": "Boalmari"
+            },
+            {
+              "id": "bhanga",
+              "nameBn": "ভাঙ্গা",
+              "nameEn": "Bhanga"
+            },
+            {
+              "id": "madhukhali",
+              "nameBn": "মধুখালী",
+              "nameEn": "Madhukhali"
+            }
+          ]
+        },
+        {
+          "id": "manikganj",
+          "nameBn": "মানিকগঞ্জ জেলা",
+          "nameEn": "Manikganj District",
+          "upazilas": [
+            {
+              "id": "manikganj-sadar",
+              "nameBn": "মানিকগঞ্জ সদর",
+              "nameEn": "Manikganj Sadar"
+            },
+            {
+              "id": "singair",
+              "nameBn": "সিংগাইর",
+              "nameEn": "Singair"
+            },
+            {
+              "id": "shibalaya",
+              "nameBn": "শিবালয়",
+              "nameEn": "Shibalaya"
+            }
+          ]
+        },
+        {
+          "id": "narsingdi",
+          "nameBn": "নরসিংদী জেলা",
+          "nameEn": "Narsingdi District",
+          "upazilas": [
+            {
+              "id": "narsingdi-sadar",
+              "nameBn": "নরসিংদী সদর",
+              "nameEn": "Narsingdi Sadar"
+            },
+            {
+              "id": "shibpur",
+              "nameBn": "শিবপুর",
+              "nameEn": "Shibpur"
+            },
+            {
+              "id": "raipura",
+              "nameBn": "রায়পুরা",
+              "nameEn": "Raipura"
+            },
+            {
+              "id": "palash",
+              "nameBn": "পলাশ",
+              "nameEn": "Palash"
+            }
+          ]
+        },
+        {
+          "id": "gopalganj",
+          "nameBn": "গোপালগঞ্জ জেলা",
+          "nameEn": "Gopalganj District",
+          "upazilas": [
+            {
+              "id": "gopalganj-sadar",
+              "nameBn": "গোপালগঞ্জ সদর",
+              "nameEn": "Gopalganj Sadar"
+            },
+            {
+              "id": "kashiani",
+              "nameBn": "কাশিয়ানী",
+              "nameEn": "Kashiani"
+            },
+            {
+              "id": "kotalipara",
+              "nameBn": "কোটালীপাড়া",
+              "nameEn": "Kotalipara"
+            },
+            {
+              "id": "tungipara",
+              "nameBn": "টুঙ্গিপাড়া",
+              "nameEn": "Tungipara"
+            }
+          ]
+        },
+        {
+          "id": "kishoreganj",
+          "nameBn": "কিশোরগঞ্জ জেলা",
+          "nameEn": "Kishoreganj District",
+          "upazilas": [
+            {
+              "id": "kishoreganj-sadar",
+              "nameBn": "কিশোরগঞ্জ সদর",
+              "nameEn": "Kishoreganj Sadar"
+            },
+            {
+              "id": "bhairab",
+              "nameBn": "ভৈরব",
+              "nameEn": "Bhairab"
+            },
+            {
+              "id": "bajitpur",
+              "nameBn": "বাজিতপুর",
+              "nameEn": "Bajitpur"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chattogram",
+      "nameBn": "চট্টগ্রাম বিভাগ",
+      "nameEn": "Chattogram Division",
+      "districts": [
+        {
+          "id": "chattogram-dist",
+          "nameBn": "চট্টগ্রাম জেলা",
+          "nameEn": "Chattogram District",
+          "upazilas": [
+            {
+              "id": "kotwali-ctg",
+              "nameBn": "কোতোয়ালী",
+              "nameEn": "Kotwali"
+            },
+            {
+              "id": "panchlaish",
+              "nameBn": "পাঁচলাইশ",
+              "nameEn": "Panchlaish"
+            },
+            {
+              "id": "hathazari",
+              "nameBn": "হাটহাজারী",
+              "nameEn": "Hathazari"
+            },
+            {
+              "id": "sitakunda",
+              "nameBn": "সীতাকুণ্ড",
+              "nameEn": "Sitakunda"
+            },
+            {
+              "id": "mirsharai",
+              "nameBn": "মীরসরাই",
+              "nameEn": "Mirsharai"
+            },
+            {
+              "id": "patiya",
+              "nameBn": "পটিয়া",
+              "nameEn": "Patiya"
+            }
+          ]
+        },
+        {
+          "id": "coxsbazar",
+          "nameBn": "কক্সবাজার জেলা",
+          "nameEn": "Cox's Bazar District",
+          "upazilas": [
+            {
+              "id": "coxs-sadar",
+              "nameBn": "কক্সবাজার সদর",
+              "nameEn": "Cox's Bazar Sadar"
+            },
+            {
+              "id": "teknaf",
+              "nameBn": "টেকনাফ",
+              "nameEn": "Teknaf"
+            },
+            {
+              "id": "ukhiya",
+              "nameBn": "উখিয়া",
+              "nameEn": "Ukhiya"
+            },
+            {
+              "id": "ramu",
+              "nameBn": "রামু",
+              "nameEn": "Ramu"
+            },
+            {
+              "id": "chakaria",
+              "nameBn": "চকোরিয়া",
+              "nameEn": "Chakaria"
+            }
+          ]
+        },
+        {
+          "id": "cumilla",
+          "nameBn": "কুমিল্লা জেলা",
+          "nameEn": "Cumilla District",
+          "upazilas": [
+            {
+              "id": "cumilla-sadar",
+              "nameBn": "কুমিল্লা আদর্শ সদর",
+              "nameEn": "Cumilla Adarsha Sadar"
+            },
+            {
+              "id": "daudkandi",
+              "nameBn": "দাউদকান্দি",
+              "nameEn": "Daudkandi"
+            },
+            {
+              "id": "chandina",
+              "nameBn": "চান্দিনা",
+              "nameEn": "Chandina"
+            },
+            {
+              "id": "laksham",
+              "nameBn": "লাকসাম",
+              "nameEn": "Laksham"
+            }
+          ]
+        },
+        {
+          "id": "noakhali",
+          "nameBn": "নোয়াখালী জেলা",
+          "nameEn": "Noakhali District",
+          "upazilas": [
+            {
+              "id": "noakhali-sadar",
+              "nameBn": "নোয়াখালী সদর",
+              "nameEn": "Noakhali Sadar"
+            },
+            {
+              "id": "begumganj",
+              "nameBn": "বেগমগঞ্জ",
+              "nameEn": "Begumganj"
+            },
+            {
+              "id": "senbagh",
+              "nameBn": "সেনবাগ",
+              "nameEn": "Senbagh"
+            },
+            {
+              "id": "companiganj",
+              "nameBn": "কোম্পানীগঞ্জ",
+              "nameEn": "Companiganj"
+            }
+          ]
+        },
+        {
+          "id": "feni",
+          "nameBn": "ফেনী জেলা",
+          "nameEn": "Feni District",
+          "upazilas": [
+            {
+              "id": "feni-sadar",
+              "nameBn": "ফেনী সদর",
+              "nameEn": "Feni Sadar"
+            },
+            {
+              "id": "parshuram",
+              "nameBn": "পরশুরাম",
+              "nameEn": "Parshuram"
+            },
+            {
+              "id": "chagalnaiya",
+              "nameBn": "ছাগলনাইয়া",
+              "nameEn": "Chhagalnaiya"
+            }
+          ]
+        },
+        {
+          "id": "chandpur",
+          "nameBn": "চাঁদপুর জেলা",
+          "nameEn": "Chandpur District",
+          "upazilas": [
+            {
+              "id": "chandpur-sadar",
+              "nameBn": "চাঁদপুর সদর",
+              "nameEn": "Chandpur Sadar"
+            },
+            {
+              "id": "hajiganj",
+              "nameBn": "হাজীগঞ্জ",
+              "nameEn": "Hajiganj"
+            },
+            {
+              "id": "matlab-uttar",
+              "nameBn": "মতলব উত্তর",
+              "nameEn": "Matlab Uttar"
+            }
+          ]
+        },
+        {
+          "id": "brahmanbaria",
+          "nameBn": "ব্রাহ্মণবাড়িয়া জেলা",
+          "nameEn": "Brahmanbaria District",
+          "upazilas": [
+            {
+              "id": "bb-sadar",
+              "nameBn": "ব্রাহ্মণবাড়িয়া সদর",
+              "nameEn": "Brahmanbaria Sadar"
+            },
+            {
+              "id": "ashuganj",
+              "nameBn": "আশুগঞ্জ",
+              "nameEn": "Ashuganj"
+            },
+            {
+              "id": "kasba",
+              "nameBn": "কসবা",
+              "nameEn": "Kasba"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "barishal",
+      "nameBn": "বরিশাল বিভাগ",
+      "nameEn": "Barishal Division",
+      "districts": [
+        {
+          "id": "barishal-dist",
+          "nameBn": "বরিশাল জেলা",
+          "nameEn": "Barishal District",
+          "upazilas": [
+            {
+              "id": "barishal-sadar",
+              "nameBn": "বরিশাল সদর",
+              "nameEn": "Barishal Sadar"
+            },
+            {
+              "id": "bakerganj",
+              "nameBn": "বাকেরগঞ্জ",
+              "nameEn": "Bakerganj"
+            },
+            {
+              "id": "babuganj",
+              "nameBn": "বাবুগঞ্জ",
+              "nameEn": "Babuganj"
+            },
+            {
+              "id": "gaurnadi",
+              "nameBn": "গৌরনদী",
+              "nameEn": "Gaurnadi"
+            },
+            {
+              "id": "mehendiganj",
+              "nameBn": "মেহেন্দিগঞ্জ",
+              "nameEn": "Mehendiganj"
+            }
+          ]
+        },
+        {
+          "id": "bhola",
+          "nameBn": "ভোলা জেলা",
+          "nameEn": "Bhola District",
+          "upazilas": [
+            {
+              "id": "bhola-sadar",
+              "nameBn": "ভোলা সদর",
+              "nameEn": "Bhola Sadar"
+            },
+            {
+              "id": "charfasson",
+              "nameBn": "চরফ্যাশন",
+              "nameEn": "Charfasson"
+            },
+            {
+              "id": "lalmohan",
+              "nameBn": "লালমোহন",
+              "nameEn": "Lalmohan"
+            },
+            {
+              "id": "borhanuddin",
+              "nameBn": "বোরহানউদ্দিন",
+              "nameEn": "Borhanuddin"
+            },
+            {
+              "id": "daulatkhan",
+              "nameBn": "দৌলতখান",
+              "nameEn": "Daulatkhan"
+            },
+            {
+              "id": "tazumuddin",
+              "nameBn": "তজুমদ্দিন",
+              "nameEn": "Tazumuddin"
+            },
+            {
+              "id": "manpura",
+              "nameBn": "মনপুরা",
+              "nameEn": "Manpura"
+            }
+          ]
+        },
+        {
+          "id": "patuakhali",
+          "nameBn": "পটুয়াখালী জেলা",
+          "nameEn": "Patuakhali District",
+          "upazilas": [
+            {
+              "id": "patuakhali-sadar",
+              "nameBn": "পটুয়াখালী সদর",
+              "nameEn": "Patuakhali Sadar"
+            },
+            {
+              "id": "kalapara",
+              "nameBn": "কলাপাড়া",
+              "nameEn": "Kalapara"
+            },
+            {
+              "id": "galachipa",
+              "nameBn": "গলাচিপা",
+              "nameEn": "Galachipa"
+            },
+            {
+              "id": "dumki",
+              "nameBn": "দুমকি",
+              "nameEn": "Dumki"
+            }
+          ]
+        },
+        {
+          "id": "pirojpur",
+          "nameBn": "পিরোজপুর জেলা",
+          "nameEn": "Pirojpur District",
+          "upazilas": [
+            {
+              "id": "pirojpur-sadar",
+              "nameBn": "পিরোজপুর সদর",
+              "nameEn": "Pirojpur Sadar"
+            },
+            {
+              "id": "bhandaria",
+              "nameBn": "ভাণ্ডারিয়া",
+              "nameEn": "Bhandaria"
+            },
+            {
+              "id": "mathbaria",
+              "nameBn": "মঠবাড়িয়া",
+              "nameEn": "Mathbaria"
+            }
+          ]
+        },
+        {
+          "id": "barguna",
+          "nameBn": "বরগুনা জেলা",
+          "nameEn": "Barguna District",
+          "upazilas": [
+            {
+              "id": "barguna-sadar",
+              "nameBn": "বরগুনা সদর",
+              "nameEn": "Barguna Sadar"
+            },
+            {
+              "id": "amtali",
+              "nameBn": "আমতলী",
+              "nameEn": "Amtali"
+            },
+            {
+              "id": "patharghata",
+              "nameBn": "পাথরঘাটা",
+              "nameEn": "Patharghata"
+            }
+          ]
+        },
+        {
+          "id": "jhalokathi",
+          "nameBn": "ঝালকাঠি জেলা",
+          "nameEn": "Jhalokathi District",
+          "upazilas": [
+            {
+              "id": "jhalokathi-sadar",
+              "nameBn": "ঝালকাঠি সদর",
+              "nameEn": "Jhalokathi Sadar"
+            },
+            {
+              "id": "nalchity",
+              "nameBn": "নলছিটি",
+              "nameEn": "Nalchity"
+            },
+            {
+              "id": "rajapur",
+              "nameBn": "রাজাপুর",
+              "nameEn": "Rajapur"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "khulna",
+      "nameBn": "খুলনা বিভাগ",
+      "nameEn": "Khulna Division",
+      "districts": [
+        {
+          "id": "khulna-dist",
+          "nameBn": "খুলনা জেলা",
+          "nameEn": "Khulna District",
+          "upazilas": [
+            {
+              "id": "khulna-sadar",
+              "nameBn": "খুলনা সদর",
+              "nameEn": "Khulna Sadar"
+            },
+            {
+              "id": "dighalia",
+              "nameBn": "দিঘলিয়া",
+              "nameEn": "Dighalia"
+            },
+            {
+              "id": "paikgachha",
+              "nameBn": "পাইকগাছা",
+              "nameEn": "Paikgachha"
+            },
+            {
+              "id": "dumuria",
+              "nameBn": "ডুমুরিয়া",
+              "nameEn": "Dumuria"
+            },
+            {
+              "id": "dopshon",
+              "nameBn": "দাকোপ",
+              "nameEn": "Dacope"
+            }
+          ]
+        },
+        {
+          "id": "jashore",
+          "nameBn": "যশোর জেলা",
+          "nameEn": "Jashore District",
+          "upazilas": [
+            {
+              "id": "jashore-sadar",
+              "nameBn": "যশোর সদর",
+              "nameEn": "Jashore Sadar"
+            },
+            {
+              "id": "benapole",
+              "nameBn": "বেনাপোল",
+              "nameEn": "Benapole"
+            },
+            {
+              "id": "jhikargachha",
+              "nameBn": "ঝিকরগাছা",
+              "nameEn": "Jhikargachha"
+            },
+            {
+              "id": "keshabpur",
+              "nameBn": "কেশবপুর",
+              "nameEn": "Keshabpur"
+            }
+          ]
+        },
+        {
+          "id": "kushtia",
+          "nameBn": "কুষ্টিয়া জেলা",
+          "nameEn": "Kushtia District",
+          "upazilas": [
+            {
+              "id": "kushtia-sadar",
+              "nameBn": "কুষ্টিয়া সদর",
+              "nameEn": "Kushtia Sadar"
+            },
+            {
+              "id": "kumarkhali",
+              "nameBn": "কুমারখালী",
+              "nameEn": "Kumarkhali"
+            },
+            {
+              "id": "mirpur-k",
+              "nameBn": "মিরপুর",
+              "nameEn": "Mirpur"
+            },
+            {
+              "id": "bheramara",
+              "nameBn": "ভেড়ামারা",
+              "nameEn": "Bheramara"
+            }
+          ]
+        },
+        {
+          "id": "satkhira",
+          "nameBn": "সাতক্ষীরা জেলা",
+          "nameEn": "Satkhira District",
+          "upazilas": [
+            {
+              "id": "satkhira-sadar",
+              "nameBn": "সাতক্ষীরা সদর",
+              "nameEn": "Satkhira Sadar"
+            },
+            {
+              "id": "shyamnagar",
+              "nameBn": "শ্যামনগর",
+              "nameEn": "Shyamnagar"
+            },
+            {
+              "id": "kaliganj-s",
+              "nameBn": "কালীগঞ্জ",
+              "nameEn": "Kaliganj"
+            }
+          ]
+        },
+        {
+          "id": "bagerhat",
+          "nameBn": "বাগেরহাট জেলা",
+          "nameEn": "Bagerhat District",
+          "upazilas": [
+            {
+              "id": "bagerhat-sadar",
+              "nameBn": "বাগেরহাট সদর",
+              "nameEn": "Bagerhat Sadar"
+            },
+            {
+              "id": "mongla",
+              "nameBn": "মোংলা",
+              "nameEn": "Mongla"
+            },
+            {
+              "id": "morrelganj",
+              "nameBn": "মোরেলগঞ্জ",
+              "nameEn": "Morrelganj"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rajshahi",
+      "nameBn": "রাজশাহী বিভাগ",
+      "nameEn": "Rajshahi Division",
+      "districts": [
+        {
+          "id": "rajshahi-dist",
+          "nameBn": "রাজশাহী জেলা",
+          "nameEn": "Rajshahi District",
+          "upazilas": [
+            {
+              "id": "boalia",
+              "nameBn": "বোয়ালিয়া",
+              "nameEn": "Boalia"
+            },
+            {
+              "id": "rajpara",
+              "nameBn": "রাজপাড়া",
+              "nameEn": "Rajpara"
+            },
+            {
+              "id": "godagari",
+              "nameBn": "গোদাগাড়ী",
+              "nameEn": "Godagari"
+            },
+            {
+              "id": "paba",
+              "nameBn": "পবা",
+              "nameEn": "Paba"
+            },
+            {
+              "id": "tanore",
+              "nameBn": "তানোর",
+              "nameEn": "Tanore"
+            }
+          ]
+        },
+        {
+          "id": "bogra",
+          "nameBn": "বগুড়া জেলা",
+          "nameEn": "Bogra District",
+          "upazilas": [
+            {
+              "id": "bogra-sadar",
+              "nameBn": "বগুড়া সদর",
+              "nameEn": "Bogra Sadar"
+            },
+            {
+              "id": "sherpur-b",
+              "nameBn": "শেরপুর",
+              "nameEn": "Sherpur"
+            },
+            {
+              "id": "shibganj",
+              "nameBn": "শিবগঞ্জ",
+              "nameEn": "Shibganj"
+            }
+          ]
+        },
+        {
+          "id": "pabna",
+          "nameBn": "পাবনা জেলা",
+          "nameEn": "Pabna District",
+          "upazilas": [
+            {
+              "id": "pabna-sadar",
+              "nameBn": "পাবনা সদর",
+              "nameEn": "Pabna Sadar"
+            },
+            {
+              "id": "ishwardi",
+              "nameBn": "ঈশ্বরদী",
+              "nameEn": "Ishwardi"
+            },
+            {
+              "id": "chatmohar",
+              "nameBn": "চাটমোহর",
+              "nameEn": "Chatmohar"
+            }
+          ]
+        },
+        {
+          "id": "sirajganj",
+          "nameBn": "সিরাজগঞ্জ জেলা",
+          "nameEn": "Sirajganj District",
+          "upazilas": [
+            {
+              "id": "sirajganj-sadar",
+              "nameBn": "সিরাজগঞ্জ সদর",
+              "nameEn": "Sirajganj Sadar"
+            },
+            {
+              "id": "shahjadpur",
+              "nameBn": "শাহজাদপুর",
+              "nameEn": "Shahjadpur"
+            },
+            {
+              "id": "ullapara",
+              "nameBn": "উল্লাপাড়া",
+              "nameEn": "Ullapara"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sylhet",
+      "nameBn": "সিলেট বিভাগ",
+      "nameEn": "Sylhet Division",
+      "districts": [
+        {
+          "id": "sylhet-dist",
+          "nameBn": "সিলেট জেলা",
+          "nameEn": "Sylhet District",
+          "upazilas": [
+            {
+              "id": "sylhet-sadar",
+              "nameBn": "সিলেট সদর",
+              "nameEn": "Sylhet Sadar"
+            },
+            {
+              "id": "beanibazar",
+              "nameBn": "বিয়ানীবাজার",
+              "nameEn": "Beanibazar"
+            },
+            {
+              "id": "golapganj",
+              "nameBn": "গোলাপগঞ্জ",
+              "nameEn": "Golapganj"
+            },
+            {
+              "id": "osmani-nagar",
+              "nameBn": "ওসমানীনগর",
+              "nameEn": "Osmani Nagar"
+            }
+          ]
+        },
+        {
+          "id": "moulvibazar",
+          "nameBn": "মৌলভীবাজার জেলা",
+          "nameEn": "Moulvibazar District",
+          "upazilas": [
+            {
+              "id": "moulvi-sadar",
+              "nameBn": "মৌলভীবাজার সদর",
+              "nameEn": "Moulvibazar Sadar"
+            },
+            {
+              "id": "sreemangal",
+              "nameBn": "শ্রীমঙ্গল",
+              "nameEn": "Sreemangal"
+            },
+            {
+              "id": "kulaura",
+              "nameBn": "কুলাউড়া",
+              "nameEn": "Kulaura"
+            }
+          ]
+        },
+        {
+          "id": "habiganj",
+          "nameBn": "হবিগঞ্জ জেলা",
+          "nameEn": "Habiganj District",
+          "upazilas": [
+            {
+              "id": "habiganj-sadar",
+              "nameBn": "হবিগঞ্জ সদর",
+              "nameEn": "Habiganj Sadar"
+            },
+            {
+              "id": "madhabpur",
+              "nameBn": "মাধবপুর",
+              "nameEn": "Madhabpur"
+            },
+            {
+              "id": "nabiganj",
+              "nameBn": "নবীগঞ্জ",
+              "nameEn": "Nabiganj"
+            }
+          ]
+        },
+        {
+          "id": "sunamganj",
+          "nameBn": "সুনামগঞ্জ জেলা",
+          "nameEn": "Sunamganj District",
+          "upazilas": [
+            {
+              "id": "sunam-sadar",
+              "nameBn": "সুনামগঞ্জ সদর",
+              "nameEn": "Sunamganj Sadar"
+            },
+            {
+              "id": "tahirpur",
+              "nameBn": "তাহিরপুর",
+              "nameEn": "Tahirpur"
+            },
+            {
+              "id": "chhatak",
+              "nameBn": "ছাতক",
+              "nameEn": "Chhatak"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rangpur",
+      "nameBn": "রংপুর বিভাগ",
+      "nameEn": "Rangpur Division",
+      "districts": [
+        {
+          "id": "rangpur-dist",
+          "nameBn": "রংপুর জেলা",
+          "nameEn": "Rangpur District",
+          "upazilas": [
+            {
+              "id": "rangpur-sadar",
+              "nameBn": "রংপুর সদর",
+              "nameEn": "Rangpur Sadar"
+            },
+            {
+              "id": "pirganj",
+              "nameBn": "পীরগঞ্জ",
+              "nameEn": "Pirganj"
+            },
+            {
+              "id": "badarganj",
+              "nameBn": "বদরগঞ্জ",
+              "nameEn": "Badarganj"
+            }
+          ]
+        },
+        {
+          "id": "dinajpur",
+          "nameBn": "দিনাজপুর জেলা",
+          "nameEn": "Dinajpur District",
+          "upazilas": [
+            {
+              "id": "dinajpur-sadar",
+              "nameBn": "দিনাজপুর সদর",
+              "nameEn": "Dinajpur Sadar"
+            },
+            {
+              "id": "birganj",
+              "nameBn": "বীরগঞ্জ",
+              "nameEn": "Birganj"
+            },
+            {
+              "id": "parbatipur",
+              "nameBn": "পার্বতীপুর",
+              "nameEn": "Parbatipur"
+            }
+          ]
+        },
+        {
+          "id": "kurigram",
+          "nameBn": "কুড়িগ্রাম জেলা",
+          "nameEn": "Kurigram District",
+          "upazilas": [
+            {
+              "id": "kurigram-sadar",
+              "nameBn": "কুড়িগ্রাম সদর",
+              "nameEn": "Kurigram Sadar"
+            },
+            {
+              "id": "nageshwari",
+              "nameBn": "নাগেশ্বরী",
+              "nameEn": "Nageshwari"
+            },
+            {
+              "id": "ulipur",
+              "nameBn": "উলিপুর",
+              "nameEn": "Ulipur"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mymensingh",
+      "nameBn": "ময়মনসিংহ বিভাগ",
+      "nameEn": "Mymensingh Division",
+      "districts": [
+        {
+          "id": "mymensingh-dist",
+          "nameBn": "ময়মনসিংহ জেলা",
+          "nameEn": "Mymensingh District",
+          "upazilas": [
+            {
+              "id": "mymensingh-sadar",
+              "nameBn": "ময়মনসিংহ সদর",
+              "nameEn": "Mymensingh Sadar"
+            },
+            {
+              "id": "muktagacha",
+              "nameBn": "মুক্তাগাছা",
+              "nameEn": "Muktagacha"
+            },
+            {
+              "id": "trishal",
+              "nameBn": "ত্রিশাল",
+              "nameEn": "Trishal"
+            },
+            {
+              "id": "bhaluka",
+              "nameBn": "ভালুকা",
+              "nameEn": "Bhaluka"
+            }
+          ]
+        },
+        {
+          "id": "jamalpur",
+          "nameBn": "জামালপুর জেলা",
+          "nameEn": "Jamalpur District",
+          "upazilas": [
+            {
+              "id": "jamalpur-sadar",
+              "nameBn": "জামালপুর সদর",
+              "nameEn": "Jamalpur Sadar"
+            },
+            {
+              "id": "sarishabari",
+              "nameBn": "সরিষাবাড়ী",
+              "nameEn": "Sarishabari"
+            },
+            {
+              "id": "melandaha",
+              "nameBn": "মেলান্দহ",
+              "nameEn": "Melandaha"
+            }
+          ]
+        },
+        {
+          "id": "netrokona",
+          "nameBn": "নেত্রকোণা জেলা",
+          "nameEn": "Netrokona District",
+          "upazilas": [
+            {
+              "id": "netrokona-sadar",
+              "nameBn": "নেত্রকোণা সদর",
+              "nameEn": "Netrokona Sadar"
+            },
+            {
+              "id": "durgapur",
+              "nameBn": "দুর্গাপুর",
+              "nameEn": "Durgapur"
+            },
+            {
+              "id": "kendua",
+              "nameBn": "কেন্দুয়া",
+              "nameEn": "Kendua"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "comments": [
+    {
+      "id": "comm-1",
+      "newsId": "news-1",
+      "newsTitle": "মেগা প্রকল্পে শতকোটি টাকার বালু ভরাট অনিয়ম: অনুসন্ধান দল গঠিত",
+      "authorName": "এম এ রহমান",
+      "authorEmail": "rahman.charfasson@example.com",
+      "content": "চরফ্যাশনে নদীভাঙন রোধে আমরা বহুদিন ধরে দাবি জানিয়ে আসছি। দুর্নীতিবাজ ঠিকাদারদের আইনের আওতায় এনে কঠোর শাস্তি দেওয়া হোক।",
+      "createdAt": "2026-09-08 11:20",
+      "status": "Approved"
+    },
+    {
+      "id": "comm-2",
+      "newsId": "news-1",
+      "newsTitle": "মেগা প্রকল্পে শতকোটি টাকার বালু ভরাট অনিয়ম: অনুসন্ধান দল গঠিত",
+      "authorName": "তাহমিনা চৌধুরী",
+      "authorEmail": "tahmina@example.com",
+      "content": "দুর্নীতির বিরুদ্ধে নিউজ পত্রিকাকে আন্তরিক ধন্যবাদ এমন সাহসী তথ্যভিত্তিক অনুসন্ধানের জন্য। সত্য প্রকাশ অব্যাহত রাখুন।",
+      "createdAt": "2026-09-08 11:45",
+      "status": "Approved"
+    },
+    {
+      "id": "comm-3",
+      "newsId": "news-2",
+      "newsTitle": "হাসপাতালের চিকিৎসা সরঞ্জাম ক্রয়ে পুকুরচুরি: ৩ কর্মকর্তা বরখাস্ত",
+      "authorName": "ড. সারওয়ার জাহান",
+      "authorEmail": "sarwar.doc@example.com",
+      "content": "হাসপাতালের যন্ত্রপাতি এভাবে ফেলে রাখা সরাসরি রোগীদের জীবন নিয়ে ছিনিমিনি খেলার শামিল। দ্রুত কমিটি গঠন করে সমাধান চাই।",
+      "createdAt": "2026-09-08 09:30",
+      "status": "Pending"
+    }
+  ],
+  "advertisements": [
+    {
+      "id": "ad-top-header",
+      "title": "জাতীয় গণস্বার্থ সচেতনতা বিজ্ঞাপন",
+      "position": "Header Ad",
+      "type": "banner",
+      "imageUrl": "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=1200&q=80",
+      "targetUrl": "https://facebook.com/DurnitiBiruddheNews",
+      "isActive": true,
+      "impressions": 24800,
+      "clicks": 1240
+    },
+    {
+      "id": "ad-sidebar-1",
+      "title": "দুর্নীতিমুক্ত বাংলাদেশ গড়ুন - দুর্নীতি দমন তথ্য সেল",
+      "position": "Sidebar Top",
+      "type": "banner",
+      "imageUrl": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=600&q=80",
+      "targetUrl": "https://www.youtube.com/@DurnitiBiruddheNews",
+      "isActive": true,
+      "impressions": 18200,
+      "clicks": 980
+    },
+    {
+      "id": "ad-home-middle",
+      "title": "ডিজিটাল নিরাপত্তা ও স্বচ্ছতা প্রচারণা",
+      "position": "Homepage Middle",
+      "type": "banner",
+      "imageUrl": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80",
+      "targetUrl": "https://facebook.com/DurnitiBiruddheNews",
+      "isActive": true,
+      "impressions": 15400,
+      "clicks": 710
+    }
+  ],
+  "settings": {
+    "siteNameBn": "দুর্নীতির বিরুদ্ধে নিউজ",
+    "siteNameEn": "Durniti Biruddhe News",
+    "taglineBn": "বস্তুনিষ্ঠ ও সাহসী অনুসন্ধানে দুর্নীতির বিরুদ্ধে আপসহীন কণ্ঠস্বর",
+    "taglineEn": "Uncompromising Voice Against Corruption with Courageous Journalism",
+    "officialEmail": "durnitibiruddhenewsbd@gmail.com",
+    "youtubeUrl": "https://www.youtube.com/@DurnitiBiruddheNews",
+    "facebookUrl": "https://facebook.com/DurnitiBiruddheNews",
+    "xUrl": "https://x.com/DurnitiNewsBD",
+    "whatsappContact": "+8801700000000",
+    "phone": "+880299887766",
+    "address": "কাওরান বাজার, ঢাকা-১২১৫, বাংলাদেশ",
+    "breakingNewsActive": true,
+    "autoPublishScheduled": true,
+    "allowComments": true,
+    "commentModeration": true,
+    "copyrightTextBn": "© ২০২৬ দুর্নীতির বিরুদ্ধে নিউজ। সর্বস্বত্ব সংরক্ষিত।",
+    "copyrightTextEn": "© 2026 Durniti Biruddhe News. All Rights Reserved."
+  },
+  "subscribers": [
+    {
+      "id": "sub-1",
+      "email": "reader1@example.com",
+      "subscribedAt": "2026-09-01 10:00"
+    },
+    {
+      "id": "sub-2",
+      "email": "citizen.press@example.com",
+      "subscribedAt": "2026-09-05 14:30"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "notif-1",
+      "title": "মেগা প্রকল্পে শতকোটি টাকার অনিয়ম তদন্ত",
+      "message": "ভোলা ও উপকূলীয় প্রতিরক্ষা প্রকল্পে বালু ভরাট জালিয়াতির বিস্তারিত পড়ুন।",
+      "url": "/news/mega-project-sand-filling-irregularities-charfasson",
+      "sentAt": "2026-09-08 10:45",
+      "sentBy": "Super Admin",
+      "recipientCount": 2
+    }
+  ],
+  "newsTips": [
+    {
+      "id": "tip-1",
+      "name": "সচেতন নাগরিক",
+      "contact": "01811223344",
+      "email": "citizen.bhola@example.com",
+      "title": "চরফ্যাশনের স্লুইস গেট নির্মাণে নিম্নমানের সিমেন্ট ব্যবহার",
+      "location": "ভোলা, চরফ্যাশন",
+      "description": "উপজেলার বেতুয়া খালের ওপর স্লুইস গেট নির্মাণে নির্ধারিত রডের বদলে মরচে ধরা লোহা ও বালু মেশানো সিমেন্ট ব্যবহার করা হচ্ছে। রাতের আঁধারে ঢালাই দেওয়া হচ্ছে। দয়া করে সরেজমিনে তদন্ত করুন।",
+      "createdAt": "2026-09-07 19:15",
+      "status": "Pending"
+    }
+  ],
+  "activityLogs": [
+    {
+      "id": "log-1",
+      "userId": "user-admin-1",
+      "userName": "Super Admin",
+      "userRole": "Super Admin",
+      "action": "System Initialized",
+      "details": "দুর্নীতির বিরুদ্ধে নিউজ ডিজিটাল পোর্টাল ও ডেটাবেজ সফলভাবে কনফিগার করা হয়েছে।",
+      "timestamp": "2026-09-08T12:55:48.264Z"
+    }
+  ],
+  "media": [
+    {
+      "id": "med-1",
+      "name": "river-dredging-investigation.jpg",
+      "url": "https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=1200&q=80",
+      "size": "1.2 MB",
+      "createdAt": "2026-09-08"
+    },
+    {
+      "id": "med-2",
+      "name": "hospital-equipments.jpg",
+      "url": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80",
+      "size": "890 KB",
+      "createdAt": "2026-09-08"
+    }
+  ],
+  "analytics": {
+    "totalVisitors": 84250,
+    "todayVisitors": 3410,
+    "weeklyVisitors": 28900,
+    "monthlyVisitors": 84250,
+    "pageViews": 196400,
+    "history": [
+      {
+        "date": "2026-09-02",
+        "pageViews": 24500,
+        "visitors": 3100
+      },
+      {
+        "date": "2026-09-03",
+        "pageViews": 27800,
+        "visitors": 3450
+      },
+      {
+        "date": "2026-09-04",
+        "pageViews": 29400,
+        "visitors": 3890
+      },
+      {
+        "date": "2026-09-05",
+        "pageViews": 31200,
+        "visitors": 4120
+      },
+      {
+        "date": "2026-09-06",
+        "pageViews": 28900,
+        "visitors": 3750
+      },
+      {
+        "date": "2026-09-07",
+        "pageViews": 33400,
+        "visitors": 4200
+      },
+      {
+        "date": "2026-09-08",
+        "pageViews": 21200,
+        "visitors": 3410
+      }
+    ]
+  }
+}
