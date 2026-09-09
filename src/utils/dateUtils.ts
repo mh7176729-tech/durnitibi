@@ -5,9 +5,41 @@ export function toBanglaNumber(num: number | string): string {
   return String(num).replace(/[0-9]/g, digit => bnDigits[parseInt(digit, 10)]);
 }
 
+export function parseNewsDateTime(dateStr?: string, timeStr?: string): Date {
+  if (!dateStr) return new Date();
+  try {
+    const cleanDate = String(dateStr).trim().replace(/\//g, '-');
+    const cleanTime = String(timeStr || '00:00').trim().slice(0, 5);
+    
+    // Check if cleanDate already has time
+    if (cleanDate.includes('T') || cleanDate.includes(' ')) {
+      const d = new Date(cleanDate);
+      if (!isNaN(d.getTime())) return d;
+    }
+    
+    const isoString = `${cleanDate}T${cleanTime || '00:00'}:00`;
+    const dIso = new Date(isoString);
+    if (!isNaN(dIso.getTime())) return dIso;
+
+    // Fallback: parse YYYY-MM-DD parts manually to avoid Safari NaN
+    const parts = cleanDate.split('-');
+    if (parts.length === 3) {
+      const year = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1;
+      const day = parseInt(parts[2], 10);
+      const timeParts = cleanTime.split(':');
+      const hours = parseInt(timeParts[0] || '0', 10);
+      const mins = parseInt(timeParts[1] || '0', 10);
+      const manualDate = new Date(year, month, day, hours, mins);
+      if (!isNaN(manualDate.getTime())) return manualDate;
+    }
+  } catch {}
+  return new Date();
+}
+
 export function formatNewsDate(dateStr: string, timeStr?: string, lang: Language = 'bn'): string {
   if (!dateStr) return '';
-  const date = new Date(`${dateStr}T${timeStr || '00:00'}`);
+  const date = parseNewsDateTime(dateStr, timeStr);
   if (isNaN(date.getTime())) return dateStr;
 
   if (lang === 'bn') {
@@ -16,7 +48,7 @@ export function formatNewsDate(dateStr: string, timeStr?: string, lang: Language
       'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'
     ];
     const day = toBanglaNumber(date.getDate());
-    const month = monthsBn[date.getMonth()];
+    const month = monthsBn[date.getMonth()] || '';
     const year = toBanglaNumber(date.getFullYear());
     const time = timeStr ? ` ${toBanglaNumber(timeStr)}` : '';
     return `${day} ${month} ${year}${time}`;
@@ -54,7 +86,7 @@ export function getCurrentHeaderDate(lang: Language = 'bn'): string {
 
 export function timeAgo(dateStr: string, timeStr?: string, lang: Language = 'bn'): string {
   if (!dateStr) return '';
-  const date = new Date(`${dateStr}T${timeStr || '00:00'}`);
+  const date = parseNewsDateTime(dateStr, timeStr);
   if (isNaN(date.getTime())) return dateStr;
 
   const diffMs = Date.now() - date.getTime();

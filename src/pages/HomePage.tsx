@@ -22,6 +22,7 @@ import {
 } from '../types';
 import { NewsCard } from '../components/NewsCard';
 import { AdSlot } from '../components/AdSlot';
+import { parseNewsDateTime } from '../utils/dateUtils';
 
 interface HomePageProps {
   news: NewsItem[];
@@ -59,14 +60,18 @@ export const HomePage: React.FC<HomePageProps> = ({
 
   // Filtered news for District section
   const locationNews = news.filter(item => {
-    if (selectedUpazila && item.locationUpazila) {
-      return item.locationUpazila === selectedUpazila;
+    const itmUpazila = item.upazila || (item as any).locationUpazila;
+    const itmDistrict = item.district || (item as any).locationDistrict;
+    const itmDivision = item.division || (item as any).locationDivision;
+
+    if (selectedUpazila && itmUpazila) {
+      return itmUpazila === selectedUpazila;
     }
-    if (selectedDistrict && item.locationDistrict) {
-      return item.locationDistrict === selectedDistrict;
+    if (selectedDistrict && itmDistrict) {
+      return itmDistrict === selectedDistrict;
     }
-    if (currentDivObj && item.locationDivision) {
-      return item.locationDivision === currentDivObj.nameBn;
+    if (currentDivObj && itmDivision) {
+      return itmDivision.includes(currentDivObj.nameBn) || currentDivObj.nameBn.includes(itmDivision);
     }
     return true;
   });
@@ -74,13 +79,17 @@ export const HomePage: React.FC<HomePageProps> = ({
   // Categorized news splits
   const leadNews = news.find(n => n.isFeatured) || news[0];
   const featuredList = news.filter(n => n.id !== leadNews?.id).slice(0, 4);
-  const corruptionReports = news.filter(n => n.categorySlug === 'corruption' || n.categorySlug === 'investigative');
-  const nationalNews = news.filter(n => n.categorySlug === 'national' || n.categorySlug === 'bangladesh');
-  const politicsNews = news.filter(n => n.categorySlug === 'politics' || n.categorySlug === 'administration');
-  const economyNews = news.filter(n => n.categorySlug === 'economy');
-  const internationalNews = news.filter(n => n.categorySlug === 'international');
+  const corruptionReports = news.filter(n => n.categoryId === 'corruption' || n.categoryId === 'investigative' || (n as any).categorySlug === 'corruption' || (n as any).categorySlug === 'investigative');
+  const nationalNews = news.filter(n => n.categoryId === 'national' || n.categoryId === 'bangladesh' || (n as any).categorySlug === 'national');
+  const politicsNews = news.filter(n => n.categoryId === 'politics' || n.categoryId === 'administration' || (n as any).categorySlug === 'politics');
+  const economyNews = news.filter(n => n.categoryId === 'economy' || (n as any).categorySlug === 'economy');
+  const internationalNews = news.filter(n => n.categoryId === 'international' || (n as any).categorySlug === 'international');
 
-  const latestList = [...news].sort((a, b) => new Date(`${b.publishedDate}T${b.publishedTime}`).getTime() - new Date(`${a.publishedDate}T${a.publishedTime}`).getTime()).slice(0, 7);
+  const latestList = [...news].sort((a, b) => {
+    const timeA = parseNewsDateTime(a.publishDate || (a as any).publishedDate, a.publishTime || (a as any).publishedTime).getTime();
+    const timeB = parseNewsDateTime(b.publishDate || (b as any).publishedDate, b.publishTime || (b as any).publishedTime).getTime();
+    return timeB - timeA;
+  }).slice(0, 7);
   const popularList = [...news].sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0)).slice(0, 7);
 
   // Video reports
@@ -254,11 +263,16 @@ export const HomePage: React.FC<HomePageProps> = ({
                     className="px-2.5 py-1.5 border border-gray-300 dark:border-slate-700 rounded-md bg-gray-50 dark:bg-slate-800 text-gray-800 dark:text-gray-200 font-medium"
                   >
                     <option value="">{lang === 'bn' ? 'সকল উপজেলা' : 'All Upazilas'}</option>
-                    {upazilas.map(upz => (
-                      <option key={upz} value={upz}>
-                        {upz}
-                      </option>
-                    ))}
+                    {upazilas.map(upz => {
+                      const id = typeof upz === 'string' ? upz : upz.id;
+                      const val = typeof upz === 'string' ? upz : upz.nameBn;
+                      const label = typeof upz === 'string' ? upz : (lang === 'bn' ? upz.nameBn : upz.nameEn);
+                      return (
+                        <option key={id} value={val}>
+                          {label}
+                        </option>
+                      );
+                    })}
                   </select>
                 )}
               </div>

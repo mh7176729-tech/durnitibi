@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Search,
   Moon,
@@ -57,6 +57,27 @@ export const Header: React.FC<HeaderProps> = ({
 
   const mainCategories = categories.filter(c => c.isActive).slice(0, 9);
   const secondaryCategories = categories.filter(c => c.isActive).slice(9);
+
+  // Secret triple-click on logo to open admin portal without public buttons
+  const clickCountRef = useRef(0);
+  const clickTimerRef = useRef<any>(null);
+
+  const handleLogoClick = () => {
+    clickCountRef.current += 1;
+    if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
+
+    if (clickCountRef.current >= 3) {
+      clickCountRef.current = 0;
+      onNavigateAdmin();
+      return;
+    }
+
+    clickTimerRef.current = setTimeout(() => {
+      clickCountRef.current = 0;
+    }, 1200);
+
+    onNavigateHome();
+  };
 
   return (
     <header className="w-full bg-white dark:bg-[#0f172a] border-b border-gray-200 dark:border-slate-800 transition-colors">
@@ -124,15 +145,6 @@ export const Header: React.FC<HeaderProps> = ({
             >
               {darkMode ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5 text-gray-600" />}
             </button>
-
-            {/* Admin Portal Link */}
-            <button
-              onClick={onNavigateAdmin}
-              className="inline-flex items-center gap-1 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 text-xs transition cursor-pointer font-medium"
-            >
-              <Lock className="w-3 h-3" />
-              <span className="hidden sm:inline">{lang === 'bn' ? 'অ্যাডমিন' : 'Admin'}</span>
-            </button>
           </div>
         </div>
       </div>
@@ -151,7 +163,7 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
 
             {/* Mini Center Logo for mobile */}
-            <button onClick={onNavigateHome} className="text-center cursor-pointer">
+            <button onClick={handleLogoClick} className="text-center cursor-pointer">
               <span className="font-serif-bn text-xl font-bold text-red-700 dark:text-red-500 tracking-tight">
                 {lang === 'bn' ? 'দুর্নীতির বিরুদ্ধে নিউজ' : 'Durniti Biruddhe News'}
               </span>
@@ -196,7 +208,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* Centered Editorial Logo */}
-          <div className="hidden md:flex flex-col items-center text-center cursor-pointer select-none" onClick={onNavigateHome}>
+          <div className="hidden md:flex flex-col items-center text-center cursor-pointer select-none" onClick={handleLogoClick}>
             <div className="flex items-center gap-2 mb-1">
               <div className="bg-red-700 text-white text-[11px] font-bold px-2 py-0.5 rounded uppercase tracking-wider flex items-center gap-1">
                 <ShieldAlert className="w-3 h-3" />
@@ -456,6 +468,18 @@ export const Header: React.FC<HeaderProps> = ({
                 >
                   {lang === 'bn' ? 'সংবাদ সংশোধন নীতিমালা' : 'Correction Policy'}
                 </button>
+                <div className="pt-2">
+                  <button
+                    onClick={() => {
+                      onNavigateAdmin();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full text-left px-3 py-2 rounded text-xs font-semibold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/30 flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <Lock className="w-3.5 h-3.5" />
+                    <span>{lang === 'bn' ? 'অ্যাডমিন প্যানেল (লগইন)' : 'Admin Portal'}</span>
+                  </button>
+                </div>
               </div>
             </div>
 

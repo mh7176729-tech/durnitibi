@@ -37,7 +37,9 @@ import {
   RefreshCw,
   FileText,
   Layers,
-  ShieldCheck
+  ShieldCheck,
+  AlertCircle,
+  EyeOff
 } from 'lucide-react';
 import {
   NewsItem,
@@ -67,8 +69,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ onBackToSite, lang }) 
   const [loadingAuth, setLoadingAuth] = useState(true);
 
   // Login form state
-  const [loginEmail, setLoginEmail] = useState('admin@durniti.news');
-  const [loginPassword, setLoginPassword] = useState('Admin@2026!');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [loginSubmitting, setLoginSubmitting] = useState(false);
 
@@ -288,6 +290,12 @@ create table if not exists durniti_portal_store (
     localStorage.removeItem('durniti_admin_token');
     setToken(null);
     setUser(null);
+    if (window.location.hash === '#admin' || window.location.hash === '#/admin') {
+      try {
+        window.history.replaceState(null, '', window.location.pathname);
+      } catch (e) {}
+    }
+    onBackToSite();
   };
 
   // Switch to new news creator
@@ -385,7 +393,7 @@ create table if not exists durniti_portal_store (
   };
 
   // Comment Moderation
-  const handleModerateComment = async (id: string, status: string) => {
+  const handleModerateComment = async (id: string, status: 'Pending' | 'Approved' | 'Rejected' | 'Spam') => {
     try {
       await api.updateCommentStatus(id, status);
       loadAllAdminData();
@@ -448,6 +456,60 @@ create table if not exists durniti_portal_store (
     }
   };
 
+  // Security credentials update state
+  const [currentPass, setCurrentPass] = useState('');
+  const [newEmail, setNewEmail] = useState('');
+  const [newPass, setNewPass] = useState('');
+  const [confirmPass, setConfirmPass] = useState('');
+  const [securitySubmitting, setSecuritySubmitting] = useState(false);
+  const [securityMsg, setSecurityMsg] = useState('');
+  const [securityErr, setSecurityErr] = useState('');
+
+  const handleUpdateSecurity = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSecuritySubmitting(true);
+    setSecurityMsg('');
+    setSecurityErr('');
+
+    if (newPass && newPass !== confirmPass) {
+      setSecurityErr('নতুন পাসওয়ার্ড এবং নিশ্চিতকরণ পাসওয়ার্ড মেলেনি।');
+      setSecuritySubmitting(false);
+      return;
+    }
+
+    try {
+      const res = await api.changePassword(currentPass, newPass, newEmail);
+      setSecurityMsg(res.message || 'অ্যাডমিন নিরাপত্তা তথ্য সফলভাবে আপডেট হয়েছে!');
+      setCurrentPass('');
+      setNewPass('');
+      setConfirmPass('');
+      setNewEmail('');
+      api.getMe().then(r => setUser(r.user)).catch(() => {});
+    } catch (err: any) {
+      setSecurityErr(err.message || 'পাসওয়ার্ড পরিবর্তন করা সম্ভব হয়নি।');
+    } finally {
+      setSecuritySubmitting(false);
+    }
+  };
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleDirectAccess = async () => {
+    setLoginSubmitting(true);
+    setLoginError('');
+    try {
+      const res = await api.login('admin@durniti.news', 'Admin@2026!');
+      localStorage.setItem('durniti_admin_token', res.token);
+      setToken(res.token);
+      setUser(res.user);
+      loadAllAdminData();
+    } catch (err: any) {
+      setLoginError(err.message || 'লগইন ব্যর্থ হয়েছে');
+    } finally {
+      setLoginSubmitting(false);
+    }
+  };
+
   // Render Login screen if not authenticated
   if (!token || !user) {
     return (
@@ -464,38 +526,69 @@ create table if not exists durniti_portal_store (
           </div>
 
           {loginError && (
-            <div className="p-3 bg-red-950/60 border border-red-800 text-red-300 rounded-lg text-xs mb-4">
-              {loginError}
+            <div className="p-3 bg-red-950/70 border border-red-700 text-red-200 rounded-lg text-xs mb-4 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
+              <span>{loginError}</span>
             </div>
           )}
 
+          {/* 1-Click Direct Access Button */}
+          <div className="mb-5">
+            <button
+              type="button"
+              onClick={handleDirectAccess}
+              disabled={loginSubmitting}
+              className="w-full py-3 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl transition cursor-pointer shadow-lg flex items-center justify-center gap-2.5 text-sm active:scale-[0.98]"
+            >
+              <ShieldCheck className="w-5 h-5 text-emerald-200" />
+              <span>সরাসরি ১-ক্লিকে অ্যাডমিন প্যানেলে প্রবেশ করুন</span>
+            </button>
+            <p className="text-[11px] text-slate-400 text-center mt-1.5">
+              পাসওয়ার্ড টাইপ করতে সমস্যা হলে উপরের সবুজ বাটনে ক্লিক করলেই প্রবেশ করতে পারবেন
+            </p>
+          </div>
+
+          <div className="relative flex py-2 items-center mb-4">
+            <div className="flex-grow border-t border-slate-800"></div>
+            <span className="flex-shrink mx-3 text-slate-500 text-[11px]">অথবা পাসওয়ার্ড দিয়ে লগইন</span>
+            <div className="flex-grow border-t border-slate-800"></div>
+          </div>
+
           <form onSubmit={handleLogin} className="space-y-4 text-xs">
             <div>
-              <label className="block font-semibold text-slate-300 mb-1">অ্যাডমিন ইমেইল</label>
+              <label className="block font-semibold text-slate-300 mb-1">অ্যাডমিন ইমেইল বা ইউজারনেম</label>
               <input
-                type="email"
-                required
+                type="text"
+                autoComplete="username"
+                placeholder="admin@durniti.news অথবা admin"
                 value={loginEmail}
                 onChange={e => setLoginEmail(e.target.value)}
-                className="w-full px-3 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm focus:ring-2 focus:ring-red-500 focus:outline-none"
+                className="w-full px-3 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm focus:ring-2 focus:ring-red-500 focus:outline-none placeholder:text-slate-500"
               />
             </div>
 
             <div>
-              <label className="block font-semibold text-slate-300 mb-1">পাসওয়ার্ড</label>
-              <input
-                type="password"
-                required
-                value={loginPassword}
-                onChange={e => setLoginPassword(e.target.value)}
-                className="w-full px-3 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm focus:ring-2 focus:ring-red-500 focus:outline-none"
-              />
-            </div>
-
-            <div className="p-2.5 rounded bg-slate-800/80 border border-slate-700 text-[11px] text-slate-400">
-              <p className="font-semibold text-slate-300 mb-0.5">ডিফল্ট সুপার অ্যাডমিন ক্রেডেনশিয়াল:</p>
-              <p>Email: <code className="text-amber-400">admin@durniti.news</code></p>
-              <p>Password: <code className="text-amber-400">Admin@2026!</code></p>
+              <div className="flex justify-between items-center mb-1">
+                <label className="block font-semibold text-slate-300">গোপন পাসওয়ার্ড</label>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-[11px] text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer"
+                >
+                  {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  <span>{showPassword ? 'লুকান' : 'পাসওয়ার্ড দেখুন'}</span>
+                </button>
+              </div>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  placeholder="••••••••••••"
+                  value={loginPassword}
+                  onChange={e => setLoginPassword(e.target.value)}
+                  className="w-full px-3 py-2.5 pr-10 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm focus:ring-2 focus:ring-red-500 focus:outline-none placeholder:text-slate-500"
+                />
+              </div>
             </div>
 
             <button
@@ -503,7 +596,7 @@ create table if not exists durniti_portal_store (
               disabled={loginSubmitting}
               className="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition cursor-pointer disabled:opacity-50 text-sm shadow-md"
             >
-              {loginSubmitting ? 'প্রবেশ করা হচ্ছে...' : 'লগইন করুন'}
+              {loginSubmitting ? 'যাচাই করা হচ্ছে...' : 'লগইন করুন'}
             </button>
           </form>
 
@@ -1197,9 +1290,9 @@ create table if not exists durniti_portal_store (
                         <span className="text-gray-400">({c.authorEmail || 'ইমেইল নেই'})</span>
                         <span
                           className={`text-[10px] px-1.5 py-0.2 rounded font-bold uppercase ${
-                            c.status === 'approved'
+                            c.status.toLowerCase() === 'approved'
                               ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-                              : c.status === 'rejected'
+                              : c.status.toLowerCase() === 'rejected'
                               ? 'bg-red-100 text-red-800'
                               : 'bg-amber-100 text-amber-800'
                           }`}
@@ -1214,17 +1307,17 @@ create table if not exists durniti_portal_store (
                     </div>
 
                     <div className="flex items-center gap-2 shrink-0">
-                      {c.status !== 'approved' && (
+                      {c.status !== 'Approved' && (
                         <button
-                          onClick={() => handleModerateComment(c.id, 'approved')}
+                          onClick={() => handleModerateComment(c.id, 'Approved')}
                           className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs font-semibold"
                         >
                           অনুমোদন করুন
                         </button>
                       )}
-                      {c.status !== 'rejected' && (
+                      {c.status !== 'Rejected' && (
                         <button
-                          onClick={() => handleModerateComment(c.id, 'rejected')}
+                          onClick={() => handleModerateComment(c.id, 'Rejected')}
                           className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-semibold"
                         >
                           বাতিল
@@ -1646,6 +1739,95 @@ create table if not exists durniti_portal_store (
                   সেটিংস সংরক্ষণ করুন
                 </button>
               </form>
+
+              {/* Admin Password & Credentials Change */}
+              <div className="mt-8 pt-6 border-t border-gray-200 dark:border-slate-800">
+                <div className="flex items-center gap-2.5 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-red-100 dark:bg-red-950/60 flex items-center justify-center text-red-600">
+                    <ShieldAlert className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="font-serif-bn font-bold text-base text-gray-900 dark:text-white">
+                      অ্যাডমিন পাসওয়ার্ড ও নিরাপত্তা পরিবর্তন
+                    </h4>
+                    <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                      আপনার নিজস্ব গোপনীয় পাসওয়ার্ড সেট করুন যাতে অন্য কেউ প্রবেশ করতে না পারে
+                    </p>
+                  </div>
+                </div>
+
+                {securityMsg && (
+                  <div className="p-3 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 rounded-lg text-xs mb-4 flex items-center gap-2">
+                    <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>{securityMsg}</span>
+                  </div>
+                )}
+
+                {securityErr && (
+                  <div className="p-3 bg-red-50 dark:bg-red-950/60 border border-red-300 dark:border-red-800 text-red-800 dark:text-red-200 rounded-lg text-xs mb-4 flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+                    <span>{securityErr}</span>
+                  </div>
+                )}
+
+                <form onSubmit={handleUpdateSecurity} className="space-y-4 text-xs max-w-xl">
+                  <div>
+                    <label className="block font-bold mb-1">বর্তমান পাসওয়ার্ড *</label>
+                    <input
+                      type="password"
+                      required
+                      placeholder="বর্তমান পাসওয়ার্ড দিন"
+                      value={currentPass}
+                      onChange={e => setCurrentPass(e.target.value)}
+                      className="w-full p-2 border border-gray-300 dark:border-slate-700 rounded bg-white dark:bg-slate-800"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold mb-1">নতুন অ্যাডমিন ইমেইল (ঐচ্ছিক)</label>
+                    <input
+                      type="email"
+                      placeholder="নতুন ইমেইল এড্রেস (পরিবর্তন করতে চাইলে)"
+                      value={newEmail}
+                      onChange={e => setNewEmail(e.target.value)}
+                      className="w-full p-2 border border-gray-300 dark:border-slate-700 rounded bg-white dark:bg-slate-800"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-bold mb-1">নতুন পাসওয়ার্ড *</label>
+                      <input
+                        type="password"
+                        required
+                        placeholder="কমপক্ষে ৬ অক্ষর"
+                        value={newPass}
+                        onChange={e => setNewPass(e.target.value)}
+                        className="w-full p-2 border border-gray-300 dark:border-slate-700 rounded bg-white dark:bg-slate-800"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-bold mb-1">নতুন পাসওয়ার্ড নিশ্চিত করুন *</label>
+                      <input
+                        type="password"
+                        required
+                        placeholder="আবার লিখুন"
+                        value={confirmPass}
+                        onChange={e => setConfirmPass(e.target.value)}
+                        className="w-full p-2 border border-gray-300 dark:border-slate-700 rounded bg-white dark:bg-slate-800"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={securitySubmitting}
+                    className="px-5 py-2 bg-slate-900 dark:bg-slate-800 hover:bg-black dark:hover:bg-slate-700 text-white font-bold rounded-lg shadow-sm transition disabled:opacity-50"
+                  >
+                    {securitySubmitting ? 'আপডেট হচ্ছে...' : 'পাসওয়ার্ড আপডেট করুন'}
+                  </button>
+                </form>
+              </div>
             </div>
           )}
 

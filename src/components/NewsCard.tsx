@@ -16,9 +16,13 @@ export const NewsCard: React.FC<NewsCardProps> = ({
   variant = 'standard',
   onClick
 }) => {
-  const title = lang === 'bn' ? news.titleBn : news.titleEn;
-  const shortDesc = lang === 'bn' ? news.shortDescriptionBn : news.shortDescriptionEn;
-  const category = lang === 'bn' ? news.categoryBn : news.categoryEn;
+  const title = (lang === 'bn' ? news.titleBn : news.titleEn) || news.titleBn;
+  const shortDesc = (lang === 'bn' ? news.shortDescBn : news.shortDescEn) || (news as any).shortDescriptionBn || news.shortDescBn || '';
+  const category = (lang === 'bn' ? news.categoryNameBn : news.categoryNameEn) || (news as any).categoryBn || news.categoryNameBn || 'জাতীয়';
+  const pubDate = news.publishDate || (news as any).publishedDate || '';
+  const pubTime = news.publishTime || (news as any).publishedTime || '';
+  const district = news.district || (news as any).locationDistrict || '';
+  const upazila = news.upazila || (news as any).locationUpazila || '';
 
   // 1. Lead / Big Hero Story
   if (variant === 'lead') {
@@ -50,12 +54,12 @@ export const NewsCard: React.FC<NewsCardProps> = ({
             </span>
           </div>
 
-          {news.locationDistrict && (
+          {district && (
             <div className="absolute bottom-3 right-3 text-white/90 text-xs flex items-center gap-1 bg-black/60 px-2 py-0.5 rounded backdrop-blur-xs">
               <MapPin className="w-3 h-3 text-red-400" />
               <span>
-                {news.locationUpazila ? `${news.locationUpazila}, ` : ''}
-                {news.locationDistrict}
+                {upazila ? `${upazila}, ` : ''}
+                {district}
               </span>
             </div>
           )}
@@ -77,7 +81,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
             </span>
             <span className="flex items-center gap-1 text-[11px]">
               <Clock className="w-3 h-3" />
-              {timeAgo(news.publishedDate, news.publishedTime, lang)}
+              {timeAgo(pubDate, pubTime, lang)}
             </span>
           </div>
         </div>
@@ -121,7 +125,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
 
           <div className="flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400 mt-3 pt-2 border-t border-gray-100 dark:border-slate-800">
             <span>{news.reporterName}</span>
-            <span>{timeAgo(news.publishedDate, news.publishedTime, lang)}</span>
+            <span>{timeAgo(pubDate, pubTime, lang)}</span>
           </div>
         </div>
       </article>
@@ -153,12 +157,12 @@ export const NewsCard: React.FC<NewsCardProps> = ({
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 text-[10px] text-gray-400 mb-1">
             <span className="text-red-600 font-semibold">{category}</span>
-            {news.locationDistrict && (
+            {district && (
               <>
                 <span>•</span>
                 <span className="flex items-center gap-0.5">
                   <MapPin className="w-2.5 h-2.5 text-gray-400" />
-                  {news.locationDistrict}
+                  {district}
                 </span>
               </>
             )}
@@ -167,7 +171,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
             {title}
           </h4>
           <span className="text-[10px] text-gray-400 mt-1 block">
-            {timeAgo(news.publishedDate, news.publishedTime, lang)}
+            {timeAgo(pubDate, pubTime, lang)}
           </span>
         </div>
       </article>
@@ -184,7 +188,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
         <div className="flex items-center gap-2 text-[10px] text-gray-400 mb-1">
           <span className="text-red-600 font-semibold">{category}</span>
           <span>•</span>
-          <span>{timeAgo(news.publishedDate, news.publishedTime, lang)}</span>
+          <span>{timeAgo(pubDate, pubTime, lang)}</span>
         </div>
         <h4 className="font-serif-bn font-semibold text-xs sm:text-sm text-gray-800 dark:text-gray-200 group-hover:text-red-600 dark:group-hover:text-red-400 line-clamp-2 leading-snug">
           {title}
@@ -224,7 +228,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({
 
         <div className="flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400 mt-3 pt-2 border-t border-gray-100 dark:border-slate-800">
           <span>{news.reporterName}</span>
-          <span>{timeAgo(news.publishedDate, news.publishedTime, lang)}</span>
+          <span>{timeAgo(pubDate, pubTime, lang)}</span>
         </div>
       </div>
     </article>

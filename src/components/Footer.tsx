@@ -222,16 +222,6 @@ export const Footer: React.FC<FooterProps> = ({
                 ? 'আমরা সংবাদ প্রকাশের ক্ষেত্রে তথ্য যাচাই, পক্ষপাতহীনতা এবং ব্যক্তিগত গোপনীয়তাকে সম্মান করি। কোনো অভিযোগভিত্তিক প্রতিবেদনে সংশ্লিষ্ট পক্ষের আনুষ্ঠানিক প্রতিক্রিয়া প্রকাশ করা হয়।'
                 : 'We adhere to rigorous verification, neutrality, and balanced reporting. Right of reply is strictly maintained for any allegations.'}
             </p>
-
-            <div className="pt-2">
-              <button
-                onClick={onNavigateAdmin}
-                className="w-full py-2 px-3 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg text-xs font-semibold text-slate-300 hover:text-white flex items-center justify-center gap-2 transition"
-              >
-                <Lock className="w-3.5 h-3.5 text-red-500" />
-                <span>{lang === 'bn' ? 'অ্যাডমিন ড্যাশবোর্ড' : 'Staff Admin Panel'}</span>
-              </button>
-            </div>
           </div>
         </div>
 
@@ -242,6 +232,16 @@ export const Footer: React.FC<FooterProps> = ({
           </p>
 
           <div className="flex items-center gap-4">
+            <button
+              onClick={onNavigateAdmin}
+              className="flex items-center gap-1.5 text-slate-400 hover:text-white transition cursor-pointer px-2 py-1 rounded bg-slate-900 border border-slate-800"
+            >
+              <Lock className="w-3.5 h-3.5 text-red-500" />
+              <span>{lang === 'bn' ? 'অ্যাডমিন প্রবেশ' : 'Admin Login'}</span>
+            </button>
+
+            <span className="text-slate-800">•</span>
+
             <button
               onClick={scrollToTop}
               className="flex items-center gap-1 hover:text-white transition"

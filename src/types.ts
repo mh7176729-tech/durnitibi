@@ -1,6 +1,18 @@
 export type Language = 'bn' | 'en';
 
-export type NewsStatus = 'Draft' | 'Pending Review' | 'Published' | 'Scheduled' | 'Archived' | 'Deleted';
+export type NewsStatus =
+  | 'Draft'
+  | 'Pending Review'
+  | 'Published'
+  | 'Scheduled'
+  | 'Archived'
+  | 'Deleted'
+  | 'draft'
+  | 'pending'
+  | 'published'
+  | 'scheduled'
+  | 'archived'
+  | 'deleted';
 
 export type UserRole = 'Super Admin' | 'Admin' | 'Editor' | 'Manager';
 
@@ -17,7 +29,20 @@ export type AdPosition =
   | 'Sidebar Middle'
   | 'Sidebar Bottom'
   | 'Footer Ad'
-  | 'Mobile Ad';
+  | 'Mobile Ad'
+  | 'header_ad'
+  | 'top_banner'
+  | 'homepage_top'
+  | 'homepage_middle'
+  | 'homepage_bottom'
+  | 'news_details_top'
+  | 'news_details_middle'
+  | 'news_details_bottom'
+  | 'sidebar_top'
+  | 'sidebar_middle'
+  | 'sidebar_bottom'
+  | 'footer_ad'
+  | 'mobile_ad';
 
 export interface NewsItem {
   id: string;
@@ -33,16 +58,24 @@ export interface NewsItem {
   categoryId: string;
   categoryNameBn: string;
   categoryNameEn: string;
+  categorySlug?: string;
+  categoryBn?: string;
+  categoryEn?: string;
   country: 'Bangladesh' | 'International';
   division?: string;
   district?: string;
   upazila?: string;
+  locationDivision?: string;
+  locationDistrict?: string;
+  locationUpazila?: string;
   reporterName: string;
   reporterId: string;
   source?: string;
   tags: string[];
   publishDate: string; // YYYY-MM-DD
   publishTime: string; // HH:mm
+  publishedDate?: string;
+  publishedTime?: string;
   updatedAt?: string;
   isBreaking: boolean;
   isFeatured: boolean;
@@ -54,7 +87,11 @@ export interface NewsItem {
   status: NewsStatus;
   viewCount: number;
   shareCount: number;
+  shortDescriptionBn?: string;
+  shortDescriptionEn?: string;
   accusedStatement?: string; // Room for attribution & response of accused parties
+  accusedPartyResponse?: string;
+  imageCaption?: string;
   isFactChecked?: boolean;
 }
 
@@ -95,7 +132,7 @@ export interface CommentItem {
   authorEmail?: string;
   content: string;
   createdAt: string;
-  status: 'Pending' | 'Approved' | 'Rejected' | 'Spam';
+  status: 'Pending' | 'Approved' | 'Rejected' | 'Spam' | 'pending' | 'approved' | 'rejected' | 'spam';
 }
 
 export interface AdvertisementItem {
@@ -143,7 +180,7 @@ export interface NewsTipItem {
   description: string;
   attachmentUrl?: string;
   createdAt: string;
-  status: 'Pending' | 'Reviewed' | 'Converted';
+  status: 'Pending' | 'Reviewed' | 'Converted' | 'pending' | 'reviewed' | 'converted';
 }
 
 export interface SubscriberItem {

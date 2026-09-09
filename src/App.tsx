@@ -13,6 +13,8 @@ import {
   Language
 } from './types';
 import { api } from './services/api';
+import { localStore } from './services/localStore';
+import { DEFAULT_SITE_SETTINGS } from './data/seedData';
 import { Header } from './components/Header';
 import { BreakingNewsTicker } from './components/BreakingNewsTicker';
 import { Footer } from './components/Footer';
@@ -25,14 +27,28 @@ import { CategoryPage } from './pages/CategoryPage';
 import { StaticPages } from './pages/StaticPages';
 import { AdminPortal } from './pages/AdminPortal';
 
+function safeGetStorage(key: string, fallback: string = ''): string {
+  try {
+    return localStorage.getItem(key) || fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function safeSetStorage(key: string, value: string): void {
+  try {
+    localStorage.setItem(key, value);
+  } catch {}
+}
+
 export default function App() {
   // Language & Theme State
   const [lang, setLang] = useState<Language>(() => {
-    return (localStorage.getItem('durniti_lang') as Language) || 'bn';
+    return (safeGetStorage('durniti_lang', 'bn') as Language) || 'bn';
   });
 
   const [darkMode, setDarkMode] = useState<boolean>(() => {
-    return localStorage.getItem('durniti_theme') === 'dark';
+    return safeGetStorage('durniti_theme') === 'dark';
   });
 
   // Navigation State
@@ -48,59 +64,81 @@ export default function App() {
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  // Portal Data
-  const [news, setNews] = useState<NewsItem[]>([]);
-  const [categories, setCategories] = useState<CategoryItem[]>([]);
-  const [locations, setLocations] = useState<DivisionItem[]>([]);
-  const [ads, setAds] = useState<AdvertisementItem[]>([]);
-  const [settings, setSettings] = useState<SiteSettings>({
-    siteNameBn: 'দুর্নীতির বিরুদ্ধে নিউজ',
-    siteNameEn: 'Durniti Biruddhe News',
-    taglineBn: 'বস্তুনিষ্ঠ ও সাহসী অনুসন্ধানে দুর্নীতির বিরুদ্ধে আপসহীন কণ্ঠস্বর',
-    taglineEn: 'Fearless investigative digital journalism against corruption',
-    contactNumber: '+880 1800-000000',
-    officialEmail: 'durnitibiruddhenewsbd@gmail.com',
-    address: 'কারওয়ান বাজার, ঢাকা-১২১৫, বাংলাদেশ',
-    facebookUrl: 'https://facebook.com/DurnitiBiruddheNews',
-    youtubeUrl: 'https://www.youtube.com/@DurnitiBiruddheNews',
-    editorialPolicyBn: 'আমরা সততা ও তথ্যভিত্তিক সাংবাদিকতায় বিশ্বাসী।',
-    editorialPolicyEn: 'We believe in integrity and evidence-based reporting.',
-    breakingNewsActive: true,
-    copyrightTextBn: '© ২০২৬ দুর্নীতির বিরুদ্ধে নিউজ। সর্বস্বত্ব সংরক্ষিত।',
-    copyrightTextEn: '© 2026 Durniti Biruddhe News. All Rights Reserved.'
+  // Portal Data - Synchronously initialized for 0ms instant loading
+  const [news, setNews] = useState<NewsItem[]>(() => {
+    try {
+      return localStore.getNews({ status: 'published', limit: 50 }).news;
+    } catch {
+      return [];
+    }
   });
-  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState<CategoryItem[]>(() => {
+    try {
+      return localStore.getCategories();
+    } catch {
+      return [];
+    }
+  });
+  const [locations, setLocations] = useState<DivisionItem[]>(() => {
+    try {
+      return localStore.getLocations();
+    } catch {
+      return [];
+    }
+  });
+  const [ads, setAds] = useState<AdvertisementItem[]>(() => {
+    try {
+      return localStore.getAds();
+    } catch {
+      return [];
+    }
+  });
+  const [settings, setSettings] = useState<SiteSettings>(() => {
+    try {
+      return localStore.getSettings();
+    } catch {
+      return DEFAULT_SITE_SETTINGS;
+    }
+  });
+  const [loading, setLoading] = useState(false);
 
   // Handle Theme effect
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
-      localStorage.setItem('durniti_theme', 'dark');
+      safeSetStorage('durniti_theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
-      localStorage.setItem('durniti_theme', 'light');
+      safeSetStorage('durniti_theme', 'light');
     }
   }, [darkMode]);
 
   // Handle Language switch
   const handleLanguageChange = (newLang: Language) => {
     setLang(newLang);
-    localStorage.setItem('durniti_lang', newLang);
+    safeSetStorage('durniti_lang', newLang);
   };
 
-  // Keyboard shortcut for search (⌘K or Ctrl+K)
+  // Keyboard shortcuts for search (⌘K or Ctrl+K) and Admin (Alt+A or Ctrl+Shift+A)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         setIsSearchOpen(true);
       }
+      if (
+        (e.altKey && (e.key === 'a' || e.key === 'A')) ||
+        ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'a' || e.key === 'A'))
+      ) {
+        e.preventDefault();
+        handleNavigateAdmin();
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Fetch initial portal data
+  // Fetch initial portal data in background (non-blocking)
   useEffect(() => {
     const initData = async () => {
       try {
@@ -112,14 +150,14 @@ export default function App() {
           api.getSettings()
         ]);
 
-        setNews(newsRes.news);
-        setCategories(catsRes);
-        setLocations(locsRes);
-        setAds(adsRes);
-        setSettings(setRes);
+        if (newsRes?.news?.length) setNews(newsRes.news);
+        if (catsRes?.length) setCategories(catsRes);
+        if (locsRes?.length) setLocations(locsRes);
+        if (adsRes) setAds(adsRes);
+        if (setRes) setSettings(setRes);
         api.trackVisit();
       } catch (err) {
-        console.error('Failed to load portal data:', err);
+        console.warn('Portal running in offline-first mode with local cache');
       } finally {
         setLoading(false);
       }
@@ -128,11 +166,35 @@ export default function App() {
     initData();
   }, []);
 
+  // Check URL hash or path for direct admin access (e.g. your-site.com/#admin or /admin)
+  useEffect(() => {
+    const handleUrlChange = () => {
+      const hash = window.location.hash;
+      const path = window.location.pathname;
+      if (hash === '#admin' || hash === '#/admin' || path === '/admin') {
+        setCurrentView('admin');
+      }
+    };
+
+    handleUrlChange();
+    window.addEventListener('hashchange', handleUrlChange);
+    window.addEventListener('popstate', handleUrlChange);
+    return () => {
+      window.removeEventListener('hashchange', handleUrlChange);
+      window.removeEventListener('popstate', handleUrlChange);
+    };
+  }, []);
+
   // Navigation Handlers
   const handleNavigateHome = () => {
     setCurrentView('home');
     setSelectedNews(null);
     setSelectedCategorySlug('');
+    if (window.location.hash === '#admin' || window.location.hash === '#/admin') {
+      try {
+        window.history.replaceState(null, '', window.location.pathname);
+      } catch (e) {}
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -159,6 +221,9 @@ export default function App() {
   };
 
   const handleNavigateAdmin = () => {
+    try {
+      window.location.hash = 'admin';
+    } catch (e) {}
     setCurrentView('admin');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -205,7 +270,7 @@ export default function App() {
 
       {/* 3. Main Content Views */}
       <div className="flex-1">
-        {loading ? (
+        {loading && news.length === 0 ? (
           <div className="max-w-7xl mx-auto px-4 py-24 text-center">
             <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
             <p className="font-serif-bn font-bold text-gray-700 dark:text-gray-300">
