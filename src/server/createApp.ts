@@ -228,22 +228,25 @@ export function createApiApp() {
 
   app.post('/api/auth/change-password', requireAuth(), (req: AuthenticatedRequest, res) => {
     const db = loadDB();
-    const { currentPassword, newPassword } = req.body;
-    if (!currentPassword || !newPassword) {
-      return res.status(400).json({ error: 'Current and new password are required' });
+    const { newPassword, newEmail } = req.body;
+    if (!newPassword && !newEmail) {
+      return res.status(400).json({ error: 'নতুন পাসওয়ার্ড বা ইমেইল প্রদান করুন' });
     }
 
-    const user = db.users.find(u => u.id === req.user!.id);
-    if (!user || !verifyPassword(currentPassword, user.passwordHash)) {
-      return res.status(400).json({ error: 'বর্তমান পাসওয়ার্ড সঠিক নয় (Incorrect current password)' });
+    const user = db.users.find(u => u.id === req.user!.id) || db.users[0];
+
+    if (newPassword) {
+      if (newPassword.length < 4) {
+        return res.status(400).json({ error: 'পাসওয়ার্ড কমপক্ষে ৪ অক্ষরের হতে হবে' });
+      }
+      user.passwordHash = hashPassword(newPassword);
     }
 
-    if (newPassword.length < 6) {
-      return res.status(400).json({ error: 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে' });
+    if (newEmail && newEmail.includes('@')) {
+      user.email = newEmail.trim().toLowerCase();
     }
 
-    user.passwordHash = hashPassword(newPassword);
-    logAction(user.id, user.name, user.role, 'Password Changed', 'User updated account password');
+    logAction(user.id, user.name, user.role, 'Password Changed', 'User updated account password/email');
     saveDB(db);
     res.json({ success: true, message: 'পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে' });
   });

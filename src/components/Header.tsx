@@ -31,7 +31,6 @@ interface HeaderProps {
   onOpenNewsTipModal: () => void;
   onOpenSubscribeModal: () => void;
   onNavigateHome: () => void;
-  onNavigateAdmin: () => void;
   onNavigateStaticPage: (pageSlug: string) => void;
   settings: SiteSettings;
 }
@@ -48,7 +47,6 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenNewsTipModal,
   onOpenSubscribeModal,
   onNavigateHome,
-  onNavigateAdmin,
   onNavigateStaticPage,
   settings
 }) => {
@@ -58,24 +56,7 @@ export const Header: React.FC<HeaderProps> = ({
   const mainCategories = categories.filter(c => c.isActive).slice(0, 9);
   const secondaryCategories = categories.filter(c => c.isActive).slice(9);
 
-  // Secret triple-click on logo to open admin portal without public buttons
-  const clickCountRef = useRef(0);
-  const clickTimerRef = useRef<any>(null);
-
   const handleLogoClick = () => {
-    clickCountRef.current += 1;
-    if (clickTimerRef.current) clearTimeout(clickTimerRef.current);
-
-    if (clickCountRef.current >= 3) {
-      clickCountRef.current = 0;
-      onNavigateAdmin();
-      return;
-    }
-
-    clickTimerRef.current = setTimeout(() => {
-      clickCountRef.current = 0;
-    }, 1200);
-
     onNavigateHome();
   };
 
@@ -101,7 +82,7 @@ export const Header: React.FC<HeaderProps> = ({
             </span>
           </div>
 
-          {/* Right: Actions, Language, Theme, Admin */}
+          {/* Right: Actions, Language, Theme */}
           <div className="flex items-center gap-3">
             {/* Citizen Journalism Tip Button */}
             <button
@@ -468,18 +449,6 @@ export const Header: React.FC<HeaderProps> = ({
                 >
                   {lang === 'bn' ? 'সংবাদ সংশোধন নীতিমালা' : 'Correction Policy'}
                 </button>
-                <div className="pt-2">
-                  <button
-                    onClick={() => {
-                      onNavigateAdmin();
-                      setMobileMenuOpen(false);
-                    }}
-                    className="w-full text-left px-3 py-2 rounded text-xs font-semibold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/30 flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <Lock className="w-3.5 h-3.5" />
-                    <span>{lang === 'bn' ? 'অ্যাডমিন প্যানেল (লগইন)' : 'Admin Portal'}</span>
-                  </button>
-                </div>
               </div>
             </div>
 

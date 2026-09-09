@@ -119,19 +119,12 @@ export default function App() {
     safeSetStorage('durniti_lang', newLang);
   };
 
-  // Keyboard shortcuts for search (⌘K or Ctrl+K) and Admin (Alt+A or Ctrl+Shift+A)
+  // Keyboard shortcut for search (⌘K or Ctrl+K)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         setIsSearchOpen(true);
-      }
-      if (
-        (e.altKey && (e.key === 'a' || e.key === 'A')) ||
-        ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'a' || e.key === 'A'))
-      ) {
-        e.preventDefault();
-        handleNavigateAdmin();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -255,7 +248,6 @@ export default function App() {
         onOpenNewsTipModal={() => setIsNewsTipOpen(true)}
         onOpenSubscribeModal={() => setIsSubscribeOpen(true)}
         onNavigateHome={handleNavigateHome}
-        onNavigateAdmin={handleNavigateAdmin}
         onNavigateStaticPage={handleNavigateStaticPage}
         settings={settings}
       />
@@ -337,7 +329,6 @@ export default function App() {
         onSelectCategory={handleSelectCategory}
         onNavigateStaticPage={handleNavigateStaticPage}
         onOpenNewsTipModal={() => setIsNewsTipOpen(true)}
-        onNavigateAdmin={handleNavigateAdmin}
       />
 
       {/* 5. Modals */}

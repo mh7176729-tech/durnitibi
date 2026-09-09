@@ -445,6 +445,29 @@ export const api = {
     );
   },
 
+  async updateUser(id: string, data: any): Promise<UserItem> {
+    return requestJson<UserItem>(
+      `${API_BASE}/users/${id}`,
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
+        body: JSON.stringify(data)
+      },
+      () => localStore.updateUser(id, data)
+    );
+  },
+
+  async deleteUser(id: string): Promise<void> {
+    return requestJson<void>(
+      `${API_BASE}/users/${id}`,
+      {
+        method: 'DELETE',
+        headers: getAuthHeader()
+      },
+      () => localStore.deleteUser(id)
+    );
+  },
+
   // 10. Activity Logs
   async getActivityLogs(): Promise<ActivityLogItem[]> {
     return requestJson<ActivityLogItem[]>(

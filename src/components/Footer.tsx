@@ -7,7 +7,6 @@ import {
   Phone,
   MapPin,
   Send,
-  Lock,
   ArrowUp,
   Heart
 } from 'lucide-react';
@@ -20,7 +19,6 @@ interface FooterProps {
   onSelectCategory: (catSlug: string) => void;
   onNavigateStaticPage: (pageSlug: string) => void;
   onOpenNewsTipModal: () => void;
-  onNavigateAdmin: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -29,8 +27,7 @@ export const Footer: React.FC<FooterProps> = ({
   settings,
   onSelectCategory,
   onNavigateStaticPage,
-  onOpenNewsTipModal,
-  onNavigateAdmin
+  onOpenNewsTipModal
 }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -232,16 +229,6 @@ export const Footer: React.FC<FooterProps> = ({
           </p>
 
           <div className="flex items-center gap-4">
-            <button
-              onClick={onNavigateAdmin}
-              className="flex items-center gap-1.5 text-slate-400 hover:text-white transition cursor-pointer px-2 py-1 rounded bg-slate-900 border border-slate-800"
-            >
-              <Lock className="w-3.5 h-3.5 text-red-500" />
-              <span>{lang === 'bn' ? 'অ্যাডমিন প্রবেশ' : 'Admin Login'}</span>
-            </button>
-
-            <span className="text-slate-800">•</span>
-
             <button
               onClick={scrollToTop}
               className="flex items-center gap-1 hover:text-white transition"

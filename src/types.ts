@@ -14,7 +14,7 @@ export type NewsStatus =
   | 'archived'
   | 'deleted';
 
-export type UserRole = 'Super Admin' | 'Admin' | 'Editor' | 'Manager';
+export type UserRole = 'Super Admin' | 'Admin' | 'Editor' | 'Manager' | 'Reporter' | 'Sub-Editor';
 
 export type AdPosition =
   | 'Header Ad'
@@ -158,6 +158,8 @@ export interface UserItem {
   isActive: boolean;
   createdAt: string;
   lastLogin?: string;
+  phone?: string;
+  password?: string;
 }
 
 export interface ActivityLogItem {

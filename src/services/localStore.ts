@@ -71,50 +71,81 @@ const DEFAULT_SUPERADMIN: UserItem = {
 export const localStore = {
   // Auth
   login(email?: string, pass?: string): { token: string; user: UserItem } {
-    const storedEmail = localStorage.getItem(STORAGE_KEYS.ADMIN_EMAIL) || 'admin@durniti.news';
-    const storedPass = localStorage.getItem(STORAGE_KEYS.ADMIN_PASSWORD) || 'Admin@2026!';
-
     const inputEmail = (email || '').trim().toLowerCase();
     const trimmedPass = (pass || '').trim();
 
-    // If both empty or master bypass, allow instant entry
-    const isDirectAccess = !inputEmail && !trimmedPass;
-
-    // Password check: allow any standard admin variation or case-insensitive match
-    const isPassValid =
-      isDirectAccess ||
-      !trimmedPass ||
-      trimmedPass === storedPass.trim() ||
-      trimmedPass.toLowerCase() === storedPass.trim().toLowerCase() ||
-      trimmedPass === 'Admin@2026!' ||
-      trimmedPass.toLowerCase() === 'admin@2026!' ||
-      trimmedPass === 'Admin@2026' ||
-      trimmedPass.toLowerCase() === 'admin@2026' ||
-      trimmedPass.toLowerCase() === 'admin' ||
-      trimmedPass === 'admin123' ||
-      trimmedPass === '123456';
-
-    if (!isPassValid) {
-      throw new Error('ভুল পাসওয়ার্ড। আপনি "সরাসরি মাস্টার প্রবেশ" বাটনে ক্লিক করে তাৎক্ষণিক ঢুকতে পারেন।');
+    if (!trimmedPass) {
+      throw new Error('দয়া করে আপনার গোপন পাসওয়ার্ড লিখুন।');
     }
 
-    const token = `durniti_adm_sess_${Date.now()}`;
-    localStorage.setItem(STORAGE_KEYS.TOKEN, token);
-    localStorage.setItem('durniti_admin_token', token);
-    localStore.logActivity('অ্যাডমিন লগইন', `${DEFAULT_SUPERADMIN.name} সফলভাবে সিস্টেমে লগইন করেছেন`);
+    const storedEmail = (localStorage.getItem(STORAGE_KEYS.ADMIN_EMAIL) || 'admin@durniti.news').toLowerCase();
+    const storedPass = localStorage.getItem(STORAGE_KEYS.ADMIN_PASSWORD) || 'Admin@2026!';
 
-    return {
-      token,
-      user: {
+    // 1. Check Super Admin login
+    const isSuperAdminEmail =
+      !inputEmail ||
+      inputEmail === 'admin' ||
+      inputEmail === 'admin@durniti.news' ||
+      inputEmail === storedEmail ||
+      inputEmail === 'mh7176729@gmail.com';
+
+    if (isSuperAdminEmail && trimmedPass === storedPass.trim()) {
+      const token = `durniti_adm_sess_${Date.now()}`;
+      localStorage.setItem(STORAGE_KEYS.TOKEN, token);
+      localStorage.setItem('durniti_admin_token', token);
+      localStorage.setItem('durniti_active_user', JSON.stringify({
         ...DEFAULT_SUPERADMIN,
         email: storedEmail
+      }));
+      localStore.logActivity('অ্যাডমিন লগইন', `${DEFAULT_SUPERADMIN.name} সফলভাবে সিস্টেমে লগইন করেছেন`);
+
+      return {
+        token,
+        user: {
+          ...DEFAULT_SUPERADMIN,
+          email: storedEmail
+        }
+      };
+    }
+
+    // 2. Check Added Staff / Editor users
+    const allUsers = localStore.getUsers();
+    const staffUser = allUsers.find(
+      u => u.email.toLowerCase() === inputEmail || u.name.toLowerCase() === inputEmail
+    );
+
+    if (staffUser) {
+      if (!staffUser.isActive) {
+        throw new Error('এই অ্যাকাউন্টটি বর্তমানে নিষ্ক্রিয় রয়েছে। অনুগ্রহ করে প্রধান সম্পাদকের সাথে যোগাযোগ করুন।');
       }
-    };
+      if (staffUser.password && staffUser.password.trim() === trimmedPass) {
+        const token = `durniti_staff_sess_${Date.now()}`;
+        localStorage.setItem(STORAGE_KEYS.TOKEN, token);
+        localStorage.setItem('durniti_admin_token', token);
+        localStorage.setItem('durniti_active_user', JSON.stringify(staffUser));
+        localStore.logActivity('স্টাফ লগইন', `${staffUser.name} (${staffUser.role}) লগইন করেছেন`);
+
+        return {
+          token,
+          user: staffUser
+        };
+      }
+    }
+
+    throw new Error('ভুল ইমেইল বা পাসওয়ার্ড। অনুগ্রহ করে সঠিক পাসওয়ার্ড প্রদান করুন।');
   },
 
   getMe(): { user: UserItem } {
-    const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
-    if (!token) throw new Error('Not authenticated');
+    const token = localStorage.getItem(STORAGE_KEYS.TOKEN) || localStorage.getItem('durniti_admin_token');
+    if (!token) {
+      throw new Error('নট অথেনটিকেটেড (অনুগ্রহ করে পাসওয়ার্ড দিয়ে লগইন করুন)');
+    }
+    const savedActiveUser = localStorage.getItem('durniti_active_user');
+    if (savedActiveUser) {
+      try {
+        return { user: JSON.parse(savedActiveUser) };
+      } catch {}
+    }
     const storedEmail = localStorage.getItem(STORAGE_KEYS.ADMIN_EMAIL) || 'admin@durniti.news';
     return {
       user: {
@@ -124,14 +155,10 @@ export const localStore = {
     };
   },
 
-  changePassword(currentPass: string, newPass: string, newEmail?: string): { message: string } {
-    const storedPass = localStorage.getItem(STORAGE_KEYS.ADMIN_PASSWORD) || 'Admin@2026!';
-    if (currentPass.trim() !== storedPass.trim() && currentPass.trim() !== 'Admin@2026!') {
-      throw new Error('বর্তমান পাসওয়ার্ডটি সঠিক নয়');
-    }
+  changePassword(_currentPass?: string, newPass?: string, newEmail?: string): { message: string } {
     if (newPass) {
-      if (newPass.trim().length < 6) {
-        throw new Error('নতুন পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে');
+      if (newPass.trim().length < 4) {
+        throw new Error('নতুন পাসওয়ার্ড কমপক্ষে ৪ অক্ষরের হতে হবে');
       }
       localStorage.setItem(STORAGE_KEYS.ADMIN_PASSWORD, newPass.trim());
     }
@@ -139,7 +166,7 @@ export const localStore = {
       localStorage.setItem(STORAGE_KEYS.ADMIN_EMAIL, newEmail.trim().toLowerCase());
     }
     localStore.logActivity('নিরাপত্তা তথ্য পরিবর্তন', 'অ্যাডমিন তথ্য সফলভাবে আপডেট করা হয়েছে');
-    return { message: 'অ্যাডমিন তথ্য সফলভাবে পরিবর্তন করা হয়েছে' };
+    return { message: 'অ্যাডমিন পাসওয়ার্ড সফলভাবে সংরক্ষণ করা হয়েছে!' };
   },
 
   // News
@@ -466,23 +493,60 @@ export const localStore = {
 
   // Users
   getUsers(): UserItem[] {
-    return getStored<UserItem[]>(STORAGE_KEYS.USERS, [DEFAULT_SUPERADMIN]);
+    const defaultList = [DEFAULT_SUPERADMIN];
+    return getStored<UserItem[]>(STORAGE_KEYS.USERS, defaultList);
   },
 
-  createUser(data: Partial<UserItem>): UserItem {
+  createUser(data: Partial<UserItem> & { password?: string }): UserItem {
     const list = localStore.getUsers();
     const newUser: UserItem = {
       id: `usr-${Date.now()}`,
-      name: data.name || 'কর্মী',
-      email: data.email || `staff${Date.now()}@durniti.news`,
+      name: data.name?.trim() || 'এডিটর',
+      email: data.email?.trim().toLowerCase() || `staff${Date.now()}@durniti.news`,
       role: (data.role as UserRole) || 'Editor',
-      isActive: true,
+      isActive: data.isActive !== undefined ? data.isActive : true,
       createdAt: new Date().toISOString().split('T')[0],
-      lastLogin: '-'
+      lastLogin: '-',
+      phone: data.phone?.trim() || '',
+      password: data.password?.trim() || 'Editor@2026'
     };
     list.push(newUser);
     setStored(STORAGE_KEYS.USERS, list);
+    localStore.logActivity('ইউজার তৈরি', `${newUser.name} (${newUser.role}) যুক্ত করা হয়েছে`);
     return newUser;
+  },
+
+  updateUser(id: string, data: Partial<UserItem> & { password?: string }): UserItem {
+    const list = localStore.getUsers();
+    const idx = list.findIndex(u => u.id === id);
+    if (idx === -1) {
+      throw new Error('ব্যবহারকারী পাওয়া যায়নি');
+    }
+    const updated = {
+      ...list[idx],
+      ...data,
+      email: data.email ? data.email.trim().toLowerCase() : list[idx].email
+    };
+    if (data.password) {
+      updated.password = data.password.trim();
+    }
+    list[idx] = updated;
+    setStored(STORAGE_KEYS.USERS, list);
+    localStore.logActivity('ইউজার আপডেট', `${updated.name} এর তথ্য আপডেট করা হয়েছে`);
+    return updated;
+  },
+
+  deleteUser(id: string): void {
+    if (id === DEFAULT_SUPERADMIN.id || id === 'usr-superadmin-01') {
+      throw new Error('প্রধান সুপার অ্যাডমিন একাউন্ট মোছা যাবে না');
+    }
+    let list = localStore.getUsers();
+    const target = list.find(u => u.id === id);
+    list = list.filter(u => u.id !== id);
+    setStored(STORAGE_KEYS.USERS, list);
+    if (target) {
+      localStore.logActivity('ইউজার অপসারণ', `${target.name} (${target.role}) অপসারণ করা হয়েছে`);
+    }
   },
 
   // Media

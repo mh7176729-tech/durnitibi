@@ -39,7 +39,8 @@ import {
   Layers,
   ShieldCheck,
   AlertCircle,
-  EyeOff
+  EyeOff,
+  UserPlus
 } from 'lucide-react';
 import {
   NewsItem,
@@ -48,6 +49,7 @@ import {
   CommentItem,
   AdvertisementItem,
   UserItem,
+  UserRole,
   NewsTipItem,
   SiteSettings,
   ActivityLogItem,
@@ -55,6 +57,7 @@ import {
   Language
 } from '../types';
 import { api } from '../services/api';
+import { localStore } from '../services/localStore';
 import { formatNewsDate, timeAgo } from '../utils/dateUtils';
 
 interface AdminPortalProps {
@@ -217,24 +220,47 @@ create table if not exists durniti_portal_store (
     tags: ['জাতীয়', 'তাজা_সংবাদ']
   });
 
-  // Verify token on mount
+  // Check for authenticated session on mount (Strict Security)
   useEffect(() => {
-    if (token) {
-      api.getMe()
-        .then(res => {
+    const savedToken = localStorage.getItem('durniti_admin_token') || localStorage.getItem('durniti_token');
+    if (!savedToken) {
+      setToken(null);
+      setUser(null);
+      setLoadingAuth(false);
+      return;
+    }
+
+    const verifyAuth = async () => {
+      try {
+        const res = await api.getMe();
+        if (res && res.user) {
           setUser(res.user);
+          setToken(savedToken);
           loadAllAdminData();
-        })
-        .catch(() => {
-          localStorage.removeItem('durniti_admin_token');
+        } else {
           setToken(null);
           setUser(null);
-        })
-        .finally(() => setLoadingAuth(false));
-    } else {
-      setLoadingAuth(false);
-    }
-  }, [token]);
+        }
+      } catch {
+        try {
+          const local = localStore.getMe();
+          if (local && local.user) {
+            setUser(local.user);
+            setToken(savedToken);
+            loadAllAdminData();
+            return;
+          }
+        } catch {}
+        localStorage.removeItem('durniti_admin_token');
+        localStorage.removeItem('durniti_token');
+        setToken(null);
+        setUser(null);
+      } finally {
+        setLoadingAuth(false);
+      }
+    };
+    verifyAuth();
+  }, []);
 
   const loadAllAdminData = async () => {
     try {
@@ -492,23 +518,98 @@ create table if not exists durniti_portal_store (
     }
   };
 
-  const [showPassword, setShowPassword] = useState(false);
+  // User Management State (Add & Manage Staff/Editors)
+  const [showAddUserModal, setShowAddUserModal] = useState(false);
+  const [newUserName, setNewUserName] = useState('');
+  const [newUserEmail, setNewUserEmail] = useState('');
+  const [newUserPassword, setNewUserPassword] = useState('');
+  const [newUserRole, setNewUserRole] = useState<UserRole>('Editor');
+  const [newUserPhone, setNewUserPhone] = useState('');
+  const [userSaving, setUserSaving] = useState(false);
+  const [userActionMsg, setUserActionMsg] = useState('');
+  const [userActionErr, setUserActionErr] = useState('');
 
-  const handleDirectAccess = async () => {
-    setLoginSubmitting(true);
-    setLoginError('');
+  // Password reset modal for specific user
+  const [resettingUser, setResettingUser] = useState<UserItem | null>(null);
+  const [resetUserPasswordInput, setResetUserPasswordInput] = useState('');
+
+  const handleCreateNewUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setUserActionErr('');
+    setUserActionMsg('');
+
+    if (!newUserName.trim() || !newUserEmail.trim() || !newUserPassword.trim()) {
+      setUserActionErr('নাম, ইমেইল ও পাসওয়ার্ড প্রদান আবশ্যক।');
+      return;
+    }
+
+    if (newUserPassword.length < 4) {
+      setUserActionErr('পাসওয়ার্ড কমপক্ষে ৪ অক্ষরের হতে হবে।');
+      return;
+    }
+
+    setUserSaving(true);
     try {
-      const res = await api.login('admin@durniti.news', 'Admin@2026!');
-      localStorage.setItem('durniti_admin_token', res.token);
-      setToken(res.token);
-      setUser(res.user);
+      await api.createUser({
+        name: newUserName.trim(),
+        email: newUserEmail.trim(),
+        password: newUserPassword.trim(),
+        role: newUserRole,
+        phone: newUserPhone.trim(),
+        isActive: true
+      });
+      setUserActionMsg(`নতুন ${newUserRole} '${newUserName}' সফলভাবে তৈরি হয়েছে!`);
+      setNewUserName('');
+      setNewUserEmail('');
+      setNewUserPassword('');
+      setNewUserPhone('');
+      setShowAddUserModal(false);
       loadAllAdminData();
     } catch (err: any) {
-      setLoginError(err.message || 'লগইন ব্যর্থ হয়েছে');
+      setUserActionErr(err.message || 'ইউজার তৈরি করা সম্ভব হয়নি।');
     } finally {
-      setLoginSubmitting(false);
+      setUserSaving(false);
     }
   };
+
+  const handleDeleteUser = async (id: string, name: string) => {
+    if (!window.confirm(`আপনি কি নিশ্চিতভাবে '${name}' অ্যাকাউন্টটি মুছে ফেলতে চান?`)) {
+      return;
+    }
+    try {
+      await api.deleteUser(id);
+      setUserActionMsg(`'${name}' সফলভাবে মুছে ফেলা হয়েছে।`);
+      loadAllAdminData();
+    } catch (err: any) {
+      alert(err.message || 'ইউজার মোছা যায়নি।');
+    }
+  };
+
+  const handleToggleUserActive = async (u: UserItem) => {
+    try {
+      await api.updateUser(u.id, { isActive: !u.isActive });
+      setUserActionMsg(`${u.name} অ্যাকাউন্টটির অবস্থা আপডেট হয়েছে।`);
+      loadAllAdminData();
+    } catch (err: any) {
+      alert(err.message || 'স্ট্যাটাস পরিবর্তন করা যায়নি।');
+    }
+  };
+
+  const handleResetPasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!resettingUser || !resetUserPasswordInput.trim()) return;
+    try {
+      await api.updateUser(resettingUser.id, { password: resetUserPasswordInput.trim() });
+      alert(`${resettingUser.name} এর পাসওয়ার্ড সফলভাবে আপডেট হয়েছে!`);
+      setResettingUser(null);
+      setResetUserPasswordInput('');
+      loadAllAdminData();
+    } catch (err: any) {
+      alert(err.message || 'পাসওয়ার্ড রিসেট করা যায়নি।');
+    }
+  };
+
+  const [showPassword, setShowPassword] = useState(false);
 
   // Render Login screen if not authenticated
   if (!token || !user) {
@@ -532,33 +633,12 @@ create table if not exists durniti_portal_store (
             </div>
           )}
 
-          {/* 1-Click Direct Access Button */}
-          <div className="mb-5">
-            <button
-              type="button"
-              onClick={handleDirectAccess}
-              disabled={loginSubmitting}
-              className="w-full py-3 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl transition cursor-pointer shadow-lg flex items-center justify-center gap-2.5 text-sm active:scale-[0.98]"
-            >
-              <ShieldCheck className="w-5 h-5 text-emerald-200" />
-              <span>সরাসরি ১-ক্লিকে অ্যাডমিন প্যানেলে প্রবেশ করুন</span>
-            </button>
-            <p className="text-[11px] text-slate-400 text-center mt-1.5">
-              পাসওয়ার্ড টাইপ করতে সমস্যা হলে উপরের সবুজ বাটনে ক্লিক করলেই প্রবেশ করতে পারবেন
-            </p>
-          </div>
-
-          <div className="relative flex py-2 items-center mb-4">
-            <div className="flex-grow border-t border-slate-800"></div>
-            <span className="flex-shrink mx-3 text-slate-500 text-[11px]">অথবা পাসওয়ার্ড দিয়ে লগইন</span>
-            <div className="flex-grow border-t border-slate-800"></div>
-          </div>
-
           <form onSubmit={handleLogin} className="space-y-4 text-xs">
             <div>
               <label className="block font-semibold text-slate-300 mb-1">অ্যাডমিন ইমেইল বা ইউজারনেম</label>
               <input
                 type="text"
+                required
                 autoComplete="username"
                 placeholder="admin@durniti.news অথবা admin"
                 value={loginEmail}
@@ -582,8 +662,9 @@ create table if not exists durniti_portal_store (
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
+                  required
                   autoComplete="current-password"
-                  placeholder="••••••••••••"
+                  placeholder="আপনার গোপন পাসওয়ার্ড দিন"
                   value={loginPassword}
                   onChange={e => setLoginPassword(e.target.value)}
                   className="w-full px-3 py-2.5 pr-10 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm focus:ring-2 focus:ring-red-500 focus:outline-none placeholder:text-slate-500"
@@ -1582,47 +1663,306 @@ create table if not exists durniti_portal_store (
 
           {/* TAB 8: USERS & RBAC */}
           {activeTab === 'users' && (
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-800 p-5 shadow-xs">
-              <h3 className="font-serif-bn font-bold text-lg text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-slate-800 pb-2">
-                স্টাফ ও ইউজার রোল ব্যবস্থাপনা ({users.length})
-              </h3>
+            <div className="space-y-6">
+              <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-800 p-5 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 dark:border-slate-800 pb-4">
+                  <div>
+                    <h3 className="font-serif-bn font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
+                      <Users className="w-5 h-5 text-red-600" />
+                      <span>স্টাফ ও এডিটর রোল ব্যবস্থাপনা ({users.length})</span>
+                    </h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      সংবাদ পোর্টালের জন্য নতুন এডিটর, রিপোর্টার ও স্টাফদের অ্যাকাউন্ট তৈরি করুন ও পাসওয়ার্ড নিয়ন্ত্রণ করুন।
+                    </p>
+                  </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-gray-50 dark:bg-slate-800 text-gray-600 dark:text-gray-300 border-b border-gray-200 dark:border-slate-700">
-                    <tr>
-                      <th className="p-3">নাম</th>
-                      <th className="p-3">ইমেইল</th>
-                      <th className="p-3">রোল</th>
-                      <th className="p-3">অবস্থা</th>
-                      <th className="p-3 text-right">পদক্ষেপ</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100 dark:divide-slate-800">
-                    {users.map(u => (
-                      <tr key={u.id}>
-                        <td className="p-3 font-bold text-gray-900 dark:text-white">{u.name}</td>
-                        <td className="p-3 text-gray-500">{u.email}</td>
-                        <td className="p-3">
-                          <span className="bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300 px-2 py-0.5 rounded font-bold uppercase text-[10px]">
-                            {u.role}
-                          </span>
-                        </td>
-                        <td className="p-3">
-                          <span className="text-emerald-600 font-semibold">সক্রিয়</span>
-                        </td>
-                        <td className="p-3 text-right">
-                          <button
-                            onClick={() => alert(`ইউজার আইডি: ${u.id}`)}
-                            className="p-1 text-gray-400 hover:text-gray-700"
+                  <button
+                    onClick={() => {
+                      setShowAddUserModal(true);
+                      setUserActionErr('');
+                      setUserActionMsg('');
+                    }}
+                    className="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg shadow-sm flex items-center justify-center gap-2 transition cursor-pointer"
+                  >
+                    <UserPlus className="w-4 h-4" />
+                    <span>+ নতুন এডিটর / স্টাফ যোগ করুন</span>
+                  </button>
+                </div>
+
+                {userActionMsg && (
+                  <div className="mt-4 p-3 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 rounded-lg text-xs flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>{userActionMsg}</span>
+                  </div>
+                )}
+
+                {userActionErr && (
+                  <div className="mt-4 p-3 bg-red-50 dark:bg-red-950/50 border border-red-300 dark:border-red-800 text-red-800 dark:text-red-200 rounded-lg text-xs flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+                    <span>{userActionErr}</span>
+                  </div>
+                )}
+
+                {/* Add User Modal / Inline Form */}
+                {showAddUserModal && (
+                  <div className="mt-5 p-5 bg-gray-50 dark:bg-slate-850 rounded-xl border-2 border-red-200 dark:border-red-900/60 shadow-md">
+                    <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-200 dark:border-slate-700">
+                      <div className="flex items-center gap-2">
+                        <UserPlus className="w-5 h-5 text-red-600" />
+                        <h4 className="font-serif-bn font-bold text-sm text-gray-900 dark:text-white">
+                          নতুন এডিটর বা স্টাফ অ্যাকাউন্ট নিবন্ধন
+                        </h4>
+                      </div>
+                      <button
+                        onClick={() => setShowAddUserModal(false)}
+                        className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xs font-bold px-2 py-1"
+                      >
+                        ✕ বন্ধ করুন
+                      </button>
+                    </div>
+
+                    <form onSubmit={handleCreateNewUser} className="space-y-4 text-xs">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block font-bold mb-1 text-gray-700 dark:text-gray-200">
+                            পূর্ণ নাম *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="যেমন: তানভীর আহমেদ"
+                            value={newUserName}
+                            onChange={e => setNewUserName(e.target.value)}
+                            className="w-full p-2.5 border border-gray-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block font-bold mb-1 text-gray-700 dark:text-gray-200">
+                            লগইন ইমেইল *
+                          </label>
+                          <input
+                            type="email"
+                            required
+                            placeholder="যেমন: tanvir@durniti.news"
+                            value={newUserEmail}
+                            onChange={e => setNewUserEmail(e.target.value)}
+                            className="w-full p-2.5 border border-gray-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block font-bold mb-1 text-gray-700 dark:text-gray-200">
+                            গোপন লগইন পাসওয়ার্ড *
+                          </label>
+                          <input
+                            type="password"
+                            required
+                            placeholder="পাসওয়ার্ড লিখুন (কমপক্ষে ৪ অক্ষর)"
+                            value={newUserPassword}
+                            onChange={e => setNewUserPassword(e.target.value)}
+                            className="w-full p-2.5 border border-gray-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block font-bold mb-1 text-gray-700 dark:text-gray-200">
+                            পদবী ও দায়িত্ব (Role) *
+                          </label>
+                          <select
+                            value={newUserRole}
+                            onChange={e => setNewUserRole(e.target.value as UserRole)}
+                            className="w-full p-2.5 border border-gray-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:outline-none font-sans"
                           >
-                            <Key className="w-3.5 h-3.5" />
+                            <option value="Editor">বার্তা সম্পাদক / এডিটর (সংবাদ প্রকাশ ও সম্পাদনা)</option>
+                            <option value="Reporter">ষ্টাফ রিপোর্টার (সংবাদ তৈরি ও খসড়া জমা)</option>
+                            <option value="Sub-Editor">সহকারী সম্পাদক (প্রুফরিডিং ও এডিট)</option>
+                            <option value="Admin">অ্যাডমিন (সংবাদ ও সেটিংস)</option>
+                            <option value="Manager">ম্যানেজার (বিজ্ঞাপন ও মন্তব্য)</option>
+                          </select>
+                        </div>
+
+                        <div className="sm:col-span-2">
+                          <label className="block font-bold mb-1 text-gray-700 dark:text-gray-200">
+                            মোবাইল নম্বর (ঐচ্ছিক)
+                          </label>
+                          <input
+                            type="tel"
+                            placeholder="যেমন: 01700000000"
+                            value={newUserPhone}
+                            onChange={e => setNewUserPhone(e.target.value)}
+                            className="w-full p-2.5 border border-gray-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-red-500 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-end gap-3 pt-3 border-t border-gray-200 dark:border-slate-700">
+                        <button
+                          type="button"
+                          onClick={() => setShowAddUserModal(false)}
+                          className="px-4 py-2 bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 text-gray-800 dark:text-gray-200 font-bold rounded-lg transition"
+                        >
+                          বাতিল
+                        </button>
+                        <button
+                          type="submit"
+                          disabled={userSaving}
+                          className="px-5 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-sm transition disabled:opacity-50 flex items-center gap-1.5"
+                        >
+                          <UserPlus className="w-4 h-4" />
+                          <span>{userSaving ? 'তৈরি হচ্ছে...' : 'অ্যাকাউন্ট সংরক্ষণ করুন'}</span>
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                )}
+
+                {/* Password Reset Modal */}
+                {resettingUser && (
+                  <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white dark:bg-slate-900 rounded-xl p-6 max-w-md w-full border border-gray-200 dark:border-slate-800 shadow-2xl">
+                      <div className="flex items-center gap-2 mb-4 text-red-600">
+                        <Key className="w-5 h-5" />
+                        <h4 className="font-serif-bn font-bold text-base text-gray-900 dark:text-white">
+                          পাসওয়ার্ড রিসেট: {resettingUser.name}
+                        </h4>
+                      </div>
+                      <p className="text-xs text-gray-600 dark:text-gray-300 mb-4">
+                        ইমেইল: <span className="font-mono font-bold">{resettingUser.email}</span>
+                      </p>
+
+                      <form onSubmit={handleResetPasswordSubmit} className="space-y-4 text-xs">
+                        <div>
+                          <label className="block font-bold mb-1">নতুন পাসওয়ার্ড লিখুন *</label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="যেমন: Pass@2026!"
+                            value={resetUserPasswordInput}
+                            onChange={e => setResetUserPasswordInput(e.target.value)}
+                            className="w-full p-2.5 border border-gray-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                          />
+                        </div>
+                        <div className="flex justify-end gap-2 pt-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setResettingUser(null);
+                              setResetUserPasswordInput('');
+                            }}
+                            className="px-4 py-2 bg-gray-200 dark:bg-slate-800 rounded-lg font-bold"
+                          >
+                            বাতিল
                           </button>
-                        </td>
+                          <button
+                            type="submit"
+                            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold shadow-sm"
+                          >
+                            পাসওয়ার্ড আপডেট করুন
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                )}
+
+                {/* Users List Table */}
+                <div className="mt-5 overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-gray-50 dark:bg-slate-800 text-gray-600 dark:text-gray-300 border-b border-gray-200 dark:border-slate-700">
+                      <tr>
+                        <th className="p-3">নাম ও পদবী</th>
+                        <th className="p-3">লগইন ইমেইল</th>
+                        <th className="p-3">রোল</th>
+                        <th className="p-3">মোবাইল</th>
+                        <th className="p-3">অবস্থা</th>
+                        <th className="p-3 text-right">পদক্ষেপ</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100 dark:divide-slate-800">
+                      {users.map(u => {
+                        const isSuperAdmin = u.role === 'Super Admin' || u.id === 'usr-superadmin-01';
+                        return (
+                          <tr key={u.id} className="hover:bg-gray-50 dark:hover:bg-slate-850 transition">
+                            <td className="p-3">
+                              <div className="flex items-center gap-2.5">
+                                <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-950/60 text-red-600 font-bold flex items-center justify-center text-xs shrink-0">
+                                  {u.name.slice(0, 1)}
+                                </div>
+                                <div>
+                                  <div className="font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
+                                    <span>{u.name}</span>
+                                    {isSuperAdmin && (
+                                      <span className="text-[10px] bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 px-1.5 py-0.2 rounded font-bold">
+                                        মূল প্রধান
+                                      </span>
+                                    )}
+                                  </div>
+                                  <span className="text-[10px] text-gray-400">নিবন্ধন: {u.createdAt}</span>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="p-3 font-mono text-gray-600 dark:text-gray-300">{u.email}</td>
+                            <td className="p-3">
+                              <span
+                                className={`px-2.5 py-1 rounded-full font-bold text-[10px] uppercase ${
+                                  u.role === 'Super Admin'
+                                    ? 'bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300'
+                                    : u.role === 'Editor'
+                                    ? 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300'
+                                    : u.role === 'Reporter'
+                                    ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+                                    : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                                }`}
+                              >
+                                {u.role}
+                              </span>
+                            </td>
+                            <td className="p-3 text-gray-500">{u.phone || '-'}</td>
+                            <td className="p-3">
+                              <button
+                                onClick={() => !isSuperAdmin && handleToggleUserActive(u)}
+                                disabled={isSuperAdmin}
+                                className={`px-2 py-0.5 rounded text-[11px] font-bold flex items-center gap-1 cursor-pointer transition ${
+                                  u.isActive !== false
+                                    ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:text-emerald-300'
+                                    : 'bg-gray-100 text-gray-500 hover:bg-gray-200 dark:bg-slate-800 dark:text-gray-400'
+                                }`}
+                                title={isSuperAdmin ? 'সুপার অ্যাডমিন সর্বদা সক্রিয়' : 'ক্লিক করে স্ট্যাটাস পরিবর্তন করুন'}
+                              >
+                                <span className={`w-1.5 h-1.5 rounded-full ${u.isActive !== false ? 'bg-emerald-500' : 'bg-gray-400'}`} />
+                                <span>{u.isActive !== false ? 'সক্রিয়' : 'নিষ্ক্রিয়'}</span>
+                              </button>
+                            </td>
+                            <td className="p-3 text-right">
+                              <div className="flex items-center justify-end gap-1.5">
+                                <button
+                                  onClick={() => {
+                                    setResettingUser(u);
+                                    setResetUserPasswordInput('');
+                                  }}
+                                  title="পাসওয়ার্ড রিসেট করুন"
+                                  className="p-1.5 bg-gray-100 hover:bg-blue-100 dark:bg-slate-800 dark:hover:bg-blue-950/60 text-gray-600 hover:text-blue-600 dark:text-gray-300 rounded-md transition"
+                                >
+                                  <Key className="w-3.5 h-3.5" />
+                                </button>
+                                {!isSuperAdmin && (
+                                  <button
+                                    onClick={() => handleDeleteUser(u.id, u.name)}
+                                    title="ইউজার অ্যাকাউন্ট মুছুন"
+                                    className="p-1.5 bg-gray-100 hover:bg-red-100 dark:bg-slate-800 dark:hover:bg-red-950/60 text-gray-600 hover:text-red-600 dark:text-gray-300 rounded-md transition"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}
@@ -1772,57 +2112,44 @@ create table if not exists durniti_portal_store (
 
                 <form onSubmit={handleUpdateSecurity} className="space-y-4 text-xs max-w-xl">
                   <div>
-                    <label className="block font-bold mb-1">বর্তমান পাসওয়ার্ড *</label>
+                    <label className="block font-bold mb-1 text-gray-700 dark:text-gray-300">আপনার নতুন পাসওয়ার্ড *</label>
                     <input
                       type="password"
                       required
-                      placeholder="বর্তমান পাসওয়ার্ড দিন"
-                      value={currentPass}
-                      onChange={e => setCurrentPass(e.target.value)}
-                      className="w-full p-2 border border-gray-300 dark:border-slate-700 rounded bg-white dark:bg-slate-800"
+                      placeholder="আপনার পছন্দের নতুন পাসওয়ার্ড দিন"
+                      value={newPass}
+                      onChange={e => setNewPass(e.target.value)}
+                      className="w-full p-2.5 border border-gray-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-sm focus:ring-2 focus:ring-red-500 focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-bold mb-1">নতুন অ্যাডমিন ইমেইল (ঐচ্ছিক)</label>
+                    <label className="block font-bold mb-1 text-gray-700 dark:text-gray-300">নতুন পাসওয়ার্ড নিশ্চিত করুন *</label>
                     <input
-                      type="email"
-                      placeholder="নতুন ইমেইল এড্রেস (পরিবর্তন করতে চাইলে)"
-                      value={newEmail}
-                      onChange={e => setNewEmail(e.target.value)}
-                      className="w-full p-2 border border-gray-300 dark:border-slate-700 rounded bg-white dark:bg-slate-800"
+                      type="password"
+                      required
+                      placeholder="পাসওয়ার্ডটি আবার টাইপ করুন"
+                      value={confirmPass}
+                      onChange={e => setConfirmPass(e.target.value)}
+                      className="w-full p-2.5 border border-gray-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-sm focus:ring-2 focus:ring-red-500 focus:outline-none"
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block font-bold mb-1">নতুন পাসওয়ার্ড *</label>
-                      <input
-                        type="password"
-                        required
-                        placeholder="কমপক্ষে ৬ অক্ষর"
-                        value={newPass}
-                        onChange={e => setNewPass(e.target.value)}
-                        className="w-full p-2 border border-gray-300 dark:border-slate-700 rounded bg-white dark:bg-slate-800"
-                      />
-                    </div>
-                    <div>
-                      <label className="block font-bold mb-1">নতুন পাসওয়ার্ড নিশ্চিত করুন *</label>
-                      <input
-                        type="password"
-                        required
-                        placeholder="আবার লিখুন"
-                        value={confirmPass}
-                        onChange={e => setConfirmPass(e.target.value)}
-                        className="w-full p-2 border border-gray-300 dark:border-slate-700 rounded bg-white dark:bg-slate-800"
-                      />
-                    </div>
+                  <div>
+                    <label className="block font-bold mb-1 text-gray-700 dark:text-gray-300">নতুন অ্যাডমিন ইমেইল (ঐচ্ছিক)</label>
+                    <input
+                      type="email"
+                      placeholder="নতুন ইমেইল এড্রেস (যদি পরিবর্তন করতে চান)"
+                      value={newEmail}
+                      onChange={e => setNewEmail(e.target.value)}
+                      className="w-full p-2.5 border border-gray-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-sm focus:ring-2 focus:ring-red-500 focus:outline-none"
+                    />
                   </div>
 
                   <button
                     type="submit"
                     disabled={securitySubmitting}
-                    className="px-5 py-2 bg-slate-900 dark:bg-slate-800 hover:bg-black dark:hover:bg-slate-700 text-white font-bold rounded-lg shadow-sm transition disabled:opacity-50"
+                    className="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-sm transition disabled:opacity-50 text-sm cursor-pointer"
                   >
                     {securitySubmitting ? 'আপডেট হচ্ছে...' : 'পাসওয়ার্ড আপডেট করুন'}
                   </button>
