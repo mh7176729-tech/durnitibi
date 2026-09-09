@@ -17,7 +17,8 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   allowComments: true,
   commentModeration: true,
   copyrightTextBn: '© ২০২৬ দুর্নীতির বিরুদ্ধে নিউজ। সর্বস্বত্ব সংরক্ষিত।',
-  copyrightTextEn: '© 2026 Durniti Biruddhe News. All Rights Reserved.'
+  copyrightTextEn: '© 2026 Durniti Biruddhe News. All Rights Reserved.',
+  googleAnalyticsId: ''
 };
 
 export const INITIAL_NEWS: NewsItem[] = [

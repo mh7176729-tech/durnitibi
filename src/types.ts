@@ -230,4 +230,5 @@ export interface SiteSettings {
   commentModeration: boolean;
   copyrightTextBn: string;
   copyrightTextEn: string;
+  googleAnalyticsId?: string;
 }

@@ -218,12 +218,15 @@ export const localStore = {
 
   getNewsBySlug(slug: string): NewsItem {
     const items = getStored<NewsItem[]>(STORAGE_KEYS.NEWS, INITIAL_NEWS);
-    const found = items.find(n => n.id === slug || n.slug === slug || n.titleBn === slug || n.titleEn === slug);
-    if (!found) {
+    const foundIndex = items.findIndex(n => n.id === slug || n.slug === slug || n.titleBn === slug || n.titleEn === slug);
+    if (foundIndex === -1) {
       if (items.length > 0) return items[0];
       throw new Error('News not found');
     }
-    return found;
+    // Increment real article view count on every genuine read
+    items[foundIndex].viewCount = (items[foundIndex].viewCount || 0) + 1;
+    setStored(STORAGE_KEYS.NEWS, items);
+    return items[foundIndex];
   },
 
   createNews(data: any): NewsItem {
@@ -642,52 +645,129 @@ export const localStore = {
     return { message: 'আপনি সফলভাবে সাবস্ক্রাইব করেছেন।' };
   },
 
-  // Analytics
+  // 100% Real Visitor Analytics (Zero fake/simulated data)
   getAnalytics(): any {
     const news = localStore.getNews().news;
     const comments = localStore.getComments();
     const tips = localStore.getNewsTips();
-    const visits = parseInt(localStorage.getItem(STORAGE_KEYS.VISITS) || '42500', 10);
+    const today = new Date().toISOString().split('T')[0];
+
+    // Clean up any legacy artificial visit keys
+    if (localStorage.getItem(STORAGE_KEYS.VISITS) === '42500') {
+      localStorage.removeItem(STORAGE_KEYS.VISITS);
+    }
+
+    const stats = getStored<any>('durniti_real_visitor_stats', {
+      totalVisitors: 0,
+      todayVisitors: 0,
+      pageViews: 0,
+      todayPageViews: 0,
+      lastDate: today,
+      history: []
+    });
+
+    const subscribers = getStored<any[]>('durniti_subscribers', []);
+
+    // Calculate real category breakdown from actual articles
+    const categoryCounts: Record<string, number> = {};
+    news.forEach(n => {
+      const cat = n.categoryNameBn || 'সাধারণ';
+      categoryCounts[cat] = (categoryCounts[cat] || 0) + (n.viewCount || 0);
+    });
+    const topCategories = Object.entries(categoryCounts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
 
     return {
-      dailyVisits: visits,
-      pageViews: visits * 3,
-      uniqueVisitors: Math.floor(visits * 0.7),
-      avgTimeOnSite: '3m 45s',
-      topCategories: [
-        { name: 'দুর্নীতি', count: 18 },
-        { name: 'অনুসন্ধানী প্রতিবেদন', count: 12 },
-        { name: 'বাংলাদেশ', count: 9 }
-      ],
-      viewsByDivision: [
-        { division: 'বরিশাল বিভাগ', count: 12400 },
-        { division: 'ঢাকা বিভাগ', count: 9800 },
-        { division: 'চট্টগ্রাম বিভাগ', count: 6400 }
-      ],
+      isRealTrackingOnly: true,
+      dailyVisits: stats.todayVisitors || 0,
+      todayVisitors: stats.todayVisitors || 0,
+      visitorsToday: stats.todayVisitors || 0,
+      totalVisitors: stats.totalVisitors || 0,
+      pageViews: stats.pageViews || 0,
+      todayPageViews: stats.todayPageViews || 0,
+      uniqueVisitors: stats.totalVisitors || 0,
+      visitorsThisMonth: stats.totalVisitors || 0,
+      monthlyVisitors: stats.totalVisitors || 0,
+      weeklyVisitors: stats.totalVisitors || 0,
+      avgTimeOnSite: stats.totalVisitors > 0 ? 'সক্রিয় পর্যবেক্ষণ' : '০ সে.',
+      topCategories,
+      viewsByDivision: [],
       totalNews: news.length,
-      publishedNews: news.filter(n => n.status === 'Published').length,
-      draftNews: news.filter(n => n.status === 'Draft').length,
-      pendingNews: news.filter(n => n.status === 'Pending Review').length,
-      scheduledNews: news.filter(n => n.status === 'Scheduled').length,
+      publishedNews: news.filter(n => n.status === 'Published' || n.status === 'published').length,
+      draftNews: news.filter(n => n.status === 'Draft' || n.status === 'draft').length,
+      pendingNews: news.filter(n => n.status === 'Pending Review' || n.status === 'pending').length,
+      scheduledNews: news.filter(n => n.status === 'Scheduled' || n.status === 'scheduled').length,
       totalComments: comments.length,
-      pendingComments: comments.filter(c => c.status === 'Pending').length,
-      subscriberCount: 1420,
+      pendingComments: comments.filter(c => c.status === 'Pending' || c.status === 'pending').length,
+      subscriberCount: subscribers.length,
       newsTipsCount: tips.length,
-      history: [
-        { date: 'Sep 02', views: 4100 },
-        { date: 'Sep 03', views: 5200 },
-        { date: 'Sep 04', views: 4900 },
-        { date: 'Sep 05', views: 6300 },
-        { date: 'Sep 06', views: 7100 },
-        { date: 'Sep 07', views: 8200 },
-        { date: 'Sep 08', views: 9500 }
-      ]
+      history: stats.history || []
     };
   },
 
   trackVisit(): void {
-    const current = parseInt(localStorage.getItem(STORAGE_KEYS.VISITS) || '42500', 10);
-    localStorage.setItem(STORAGE_KEYS.VISITS, String(current + 1));
+    const today = new Date().toISOString().split('T')[0];
+    const isNewSession = !sessionStorage.getItem('durniti_real_session_active');
+
+    // Wipe legacy artificial visits
+    if (localStorage.getItem(STORAGE_KEYS.VISITS) === '42500') {
+      localStorage.removeItem(STORAGE_KEYS.VISITS);
+    }
+
+    let stats = getStored<any>('durniti_real_visitor_stats', {
+      totalVisitors: 0,
+      todayVisitors: 0,
+      pageViews: 0,
+      todayPageViews: 0,
+      lastDate: today,
+      history: []
+    });
+
+    // Check if new day
+    if (stats.lastDate !== today) {
+      if (stats.lastDate && (stats.todayPageViews > 0 || stats.todayVisitors > 0)) {
+        stats.history = [
+          ...(stats.history || []).slice(-13),
+          { date: stats.lastDate, pageViews: stats.todayPageViews, visitors: stats.todayVisitors }
+        ];
+      }
+      stats.todayVisitors = 0;
+      stats.todayPageViews = 0;
+      stats.lastDate = today;
+    }
+
+    // Every genuine page view increments pageViews
+    stats.pageViews = (stats.pageViews || 0) + 1;
+    stats.todayPageViews = (stats.todayPageViews || 0) + 1;
+
+    // Only real new sessions count as unique visitors
+    if (isNewSession) {
+      try {
+        sessionStorage.setItem('durniti_real_session_active', 'true');
+      } catch (e) {}
+      stats.totalVisitors = (stats.totalVisitors || 0) + 1;
+      stats.todayVisitors = (stats.todayVisitors || 0) + 1;
+    }
+
+    setStored('durniti_real_visitor_stats', stats);
+  },
+
+  resetRealAnalytics(): void {
+    const today = new Date().toISOString().split('T')[0];
+    setStored('durniti_real_visitor_stats', {
+      totalVisitors: 0,
+      todayVisitors: 0,
+      pageViews: 0,
+      todayPageViews: 0,
+      lastDate: today,
+      history: []
+    });
+    localStorage.removeItem(STORAGE_KEYS.VISITS);
+    try {
+      sessionStorage.removeItem('durniti_real_session_active');
+    } catch (e) {}
   },
 
   getDatabaseStatus(): any {

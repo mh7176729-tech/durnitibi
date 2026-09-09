@@ -942,7 +942,7 @@ export function createApiApp() {
       pageViews: db.analytics.pageViews,
       subscriberCount: db.subscribers.length,
       newsTipsCount: db.newsTips.length,
-      history: db.analytics.history,
+      history: db.analytics.history || [],
       topCategories,
       deviceBreakdown: { desktop: 58, mobile: 37, tablet: 5 }
     });
@@ -950,11 +950,35 @@ export function createApiApp() {
 
   app.post('/api/analytics/track-visit', (req, res) => {
     const db = loadDB();
-    db.analytics.totalVisitors += 1;
-    db.analytics.todayVisitors += 1;
-    db.analytics.pageViews += 1;
+    if (!db.analytics) {
+      db.analytics = {
+        totalVisitors: 0,
+        todayVisitors: 0,
+        weeklyVisitors: 0,
+        monthlyVisitors: 0,
+        pageViews: 0,
+        history: []
+      };
+    }
+    db.analytics.totalVisitors = (db.analytics.totalVisitors || 0) + 1;
+    db.analytics.todayVisitors = (db.analytics.todayVisitors || 0) + 1;
+    db.analytics.pageViews = (db.analytics.pageViews || 0) + 1;
     saveDB(db);
-    res.json({ success: true });
+    res.json({ success: true, realVisitors: db.analytics.totalVisitors });
+  });
+
+  app.post('/api/analytics/reset', (req, res) => {
+    const db = loadDB();
+    db.analytics = {
+      totalVisitors: 0,
+      todayVisitors: 0,
+      weeklyVisitors: 0,
+      monthlyVisitors: 0,
+      pageViews: 0,
+      history: []
+    };
+    saveDB(db);
+    res.json({ success: true, message: 'Real analytics reset' });
   });
 
   return app;

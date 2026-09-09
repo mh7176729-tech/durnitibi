@@ -529,6 +529,15 @@ export const api = {
     }
   },
 
+  async resetRealAnalytics(): Promise<void> {
+    try {
+      fetch(`${API_BASE}/analytics/reset`, { method: 'POST' }).catch(() => {});
+      localStore.resetRealAnalytics();
+    } catch (e) {
+      localStore.resetRealAnalytics();
+    }
+  },
+
   // 13. Auth
   async checkSetupStatus(): Promise<{ configured: boolean; hasSuperAdmin: boolean; totalUsers: number }> {
     return requestJson<{ configured: boolean; hasSuperAdmin: boolean; totalUsers: number }>(

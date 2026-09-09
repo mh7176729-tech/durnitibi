@@ -159,6 +159,31 @@ export default function App() {
     initData();
   }, []);
 
+  // Real Google Analytics (GA4) injection when GA ID is configured
+  useEffect(() => {
+    if (!settings?.googleAnalyticsId) return;
+    const gaId = settings.googleAnalyticsId.trim();
+    if (!gaId.startsWith('G-')) return;
+
+    const scriptId = 'google-analytics-script';
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+      document.head.appendChild(script);
+
+      const inlineScript = document.createElement('script');
+      inlineScript.innerHTML = `
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '${gaId}');
+      `;
+      document.head.appendChild(inlineScript);
+    }
+  }, [settings?.googleAnalyticsId]);
+
   // Check URL hash or path for direct admin access (e.g. your-site.com/#admin or /admin)
   useEffect(() => {
     const handleUrlChange = () => {

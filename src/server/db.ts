@@ -181,20 +181,12 @@ export function getFreshSeedState(): DBState {
       }
     ],
     analytics: {
-      totalVisitors: 84250,
-      todayVisitors: 3410,
-      weeklyVisitors: 28900,
-      monthlyVisitors: 84250,
-      pageViews: 196400,
-      history: [
-        { date: '2026-09-02', pageViews: 24500, visitors: 3100 },
-        { date: '2026-09-03', pageViews: 27800, visitors: 3450 },
-        { date: '2026-09-04', pageViews: 29400, visitors: 3890 },
-        { date: '2026-09-05', pageViews: 31200, visitors: 4120 },
-        { date: '2026-09-06', pageViews: 28900, visitors: 3750 },
-        { date: '2026-09-07', pageViews: 33400, visitors: 4200 },
-        { date: '2026-09-08', pageViews: 21200, visitors: 3410 }
-      ]
+      totalVisitors: 0,
+      todayVisitors: 0,
+      weeklyVisitors: 0,
+      monthlyVisitors: 0,
+      pageViews: 0,
+      history: []
     }
   };
 }
