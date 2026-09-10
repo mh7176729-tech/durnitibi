@@ -262,11 +262,25 @@ create table if not exists durniti_portal_store (
     verifyAuth();
   }, []);
 
+  const [syncing, setSyncing] = useState(false);
+  const [syncMessage, setSyncMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
   const loadAllAdminData = async () => {
     try {
+      // Auto-sync: If the admin device has user-created news, auto-sync to server
+      const localNews = localStore.getNews({ status: 'all' }).news;
+      const hasCustomNews =
+        localNews.length > 0 &&
+        (localNews.length !== 7 ||
+          localNews.some(n => !n.id.startsWith('news-') || parseInt(n.id.replace('news-', ''), 10) > 100));
+
+      if (hasCustomNews) {
+        await api.syncClientToServer().catch(() => {});
+      }
+
       const [nRes, cRes, lRes, commRes, adRes, tRes, uRes, logRes, mRes, sRes, aRes] =
         await Promise.all([
-          api.getNews({ limit: 100 }),
+          api.getNews({ limit: 100, status: 'all' }),
           api.getCategories(),
           api.getLocations(),
           api.getComments(),
@@ -292,6 +306,28 @@ create table if not exists durniti_portal_store (
       setAnalytics(aRes);
     } catch (err) {
       console.error('Failed to load admin data:', err);
+    }
+  };
+
+  const handleManualSyncToServer = async () => {
+    setSyncing(true);
+    setSyncMessage(null);
+    try {
+      const res = await api.syncClientToServer();
+      if (res.success) {
+        setSyncMessage({
+          type: 'success',
+          text: `সার্ভারে সফলভাবে সংরক্ষিত ও লাইভ হয়েছে! (${res.totalNews || newsList.length}টি সংবাদ)`
+        });
+        loadAllAdminData();
+      } else {
+        setSyncMessage({ type: 'error', text: res.message || 'সিঙ্ক ব্যর্থ হয়েছে' });
+      }
+    } catch (e: any) {
+      setSyncMessage({ type: 'error', text: e.message || 'সিঙ্ক ব্যর্থ হয়েছে' });
+    } finally {
+      setSyncing(false);
+      setTimeout(() => setSyncMessage(null), 6000);
     }
   };
 
@@ -1061,7 +1097,7 @@ create table if not exists durniti_portal_store (
           {/* TAB 2: NEWS LIST */}
           {activeTab === 'news_list' && (
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-800 p-5 shadow-xs">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-gray-100 dark:border-slate-800 pb-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 border-b border-gray-100 dark:border-slate-800 pb-3">
                 <div>
                   <h3 className="font-serif-bn font-bold text-lg text-gray-900 dark:text-white">
                     সকল সংবাদ তালিকা ({newsList.length})
@@ -1069,14 +1105,44 @@ create table if not exists durniti_portal_store (
                   <p className="text-xs text-gray-500">সম্পাদনা, অবস্থা পরিবর্তন বা মুছে ফেলুন</p>
                 </div>
 
-                <button
-                  onClick={handleStartCreateNews}
-                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-lg flex items-center gap-1.5 shadow-sm transition"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>নতুন সংবাদ লিখুন</span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleManualSyncToServer}
+                    disabled={syncing}
+                    className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-xs rounded-lg flex items-center gap-1.5 shadow-sm transition cursor-pointer"
+                    title="এই ডিভাইসের সমস্ত সংবাদ সরাসরি মূল সার্ভার ও ডাটাবেসে সেভ করুন"
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 ${syncing ? 'animate-spin' : ''}`} />
+                    <span>{syncing ? 'সার্ভারে সেভ হচ্ছে...' : 'সার্ভারে লাইভ সিঙ্ক'}</span>
+                  </button>
+
+                  <button
+                    onClick={handleStartCreateNews}
+                    className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-lg flex items-center gap-1.5 shadow-sm transition"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>নতুন সংবাদ লিখুন</span>
+                  </button>
+                </div>
               </div>
+
+              {syncMessage && (
+                <div
+                  className={`mb-4 p-3 rounded-lg text-xs font-semibold flex items-center gap-2 ${
+                    syncMessage.type === 'success'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
+                      : 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800'
+                  }`}
+                >
+                  {syncMessage.type === 'success' ? (
+                    <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+                  ) : (
+                    <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
+                  )}
+                  <span>{syncMessage.text}</span>
+                </div>
+              )}
 
               {/* Table */}
               <div className="overflow-x-auto">

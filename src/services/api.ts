@@ -26,7 +26,7 @@ async function requestJson<T>(
   fallbackFn?: () => T | Promise<T>
 ): Promise<T> {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 1500);
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
 
   try {
     const res = await fetch(url, {
@@ -130,40 +130,55 @@ export const api = {
   },
 
   async createNews(data: Partial<NewsItem>): Promise<NewsItem> {
-    return requestJson<NewsItem>(
-      `${API_BASE}/news`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
-        body: JSON.stringify(data)
-      },
-      () => localStore.createNews(data)
-    );
+    const localItem = localStore.createNews(data);
+    try {
+      const serverItem = await requestJson<NewsItem>(
+        `${API_BASE}/news`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
+          body: JSON.stringify({ ...data, id: localItem.id })
+        }
+      );
+      if (serverItem && serverItem.id) {
+        // Sync back to local store to maintain ID and timestamps
+        localStore.updateNews(localItem.id, serverItem);
+        return serverItem;
+      }
+      return localItem;
+    } catch {
+      return localItem;
+    }
   },
 
   async updateNews(id: string, data: Partial<NewsItem>): Promise<NewsItem> {
-    return requestJson<NewsItem>(
-      `${API_BASE}/news/${id}`,
-      {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
-        body: JSON.stringify(data)
-      },
-      () => localStore.updateNews(id, data)
-    );
+    const localItem = localStore.updateNews(id, data);
+    try {
+      const serverItem = await requestJson<NewsItem>(
+        `${API_BASE}/news/${id}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
+          body: JSON.stringify(data)
+        }
+      );
+      return serverItem || localItem;
+    } catch {
+      return localItem;
+    }
   },
 
   async deleteNews(id: string): Promise<void> {
-    return requestJson<void>(
-      `${API_BASE}/news/${id}`,
-      {
-        method: 'DELETE',
-        headers: getAuthHeader()
-      },
-      () => {
-        localStore.deleteNews(id);
-      }
-    );
+    localStore.deleteNews(id);
+    try {
+      await requestJson<void>(
+        `${API_BASE}/news/${id}`,
+        {
+          method: 'DELETE',
+          headers: getAuthHeader()
+        }
+      );
+    } catch {}
   },
 
   // 2. Categories
@@ -434,38 +449,50 @@ export const api = {
   },
 
   async createUser(data: any): Promise<UserItem> {
-    return requestJson<UserItem>(
-      `${API_BASE}/users`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
-        body: JSON.stringify(data)
-      },
-      () => localStore.createUser(data)
-    );
+    const localUser = localStore.createUser(data);
+    try {
+      const serverUser = await requestJson<UserItem>(
+        `${API_BASE}/users`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
+          body: JSON.stringify(data)
+        }
+      );
+      return serverUser || localUser;
+    } catch {
+      return localUser;
+    }
   },
 
   async updateUser(id: string, data: any): Promise<UserItem> {
-    return requestJson<UserItem>(
-      `${API_BASE}/users/${id}`,
-      {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
-        body: JSON.stringify(data)
-      },
-      () => localStore.updateUser(id, data)
-    );
+    const localUser = localStore.updateUser(id, data);
+    try {
+      const serverUser = await requestJson<UserItem>(
+        `${API_BASE}/users/${id}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
+          body: JSON.stringify(data)
+        }
+      );
+      return serverUser || localUser;
+    } catch {
+      return localUser;
+    }
   },
 
   async deleteUser(id: string): Promise<void> {
-    return requestJson<void>(
-      `${API_BASE}/users/${id}`,
-      {
-        method: 'DELETE',
-        headers: getAuthHeader()
-      },
-      () => localStore.deleteUser(id)
-    );
+    localStore.deleteUser(id);
+    try {
+      await requestJson<void>(
+        `${API_BASE}/users/${id}`,
+        {
+          method: 'DELETE',
+          headers: getAuthHeader()
+        }
+      );
+    } catch {}
   },
 
   // 10. Activity Logs
@@ -560,19 +587,74 @@ export const api = {
   },
 
   async login(email?: string, password?: string): Promise<{ token: string; user: any }> {
-    // 1. Immediately create or validate authenticated session via localStore
-    const localAuth = localStore.login(email, password);
+    const cleanEmail = (email || '').trim().toLowerCase();
+    const cleanPass = (password || '').trim();
 
-    // 2. Fire-and-forget sync to backend server in background if available
+    // 1. Try server login first so we get an authenticated server JWT
     try {
-      fetch(`${API_BASE}/auth/login`, {
+      const res = await fetch(`${API_BASE}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email || 'admin@durniti.news', password: password || 'Admin@2026!' })
-      }).catch(() => {});
+        body: JSON.stringify({ email: cleanEmail || 'admin@durniti.news', password: cleanPass || 'Admin@2026!' })
+      });
+      const contentType = res.headers.get('content-type') || '';
+      if (res.ok && contentType.includes('application/json')) {
+        const data = await res.json();
+        if (data.token) {
+          localStorage.setItem('durniti_admin_token', data.token);
+          localStorage.setItem('durniti_auth_token', data.token);
+          if (data.user) {
+            localStorage.setItem('durniti_active_user', JSON.stringify(data.user));
+          }
+          return { token: data.token, user: data.user };
+        }
+      }
     } catch {}
 
+    // 2. If server was unreachable or returned non-JSON, fallback to localStore
+    const localAuth = localStore.login(cleanEmail, cleanPass);
     return localAuth;
+  },
+
+  async syncClientToServer(): Promise<{ success: boolean; message: string; totalNews?: number }> {
+    try {
+      const currentNews = localStore.getNews({ status: 'all' }).news;
+      const currentUsers = localStore.getUsers();
+      const currentCategories = localStore.getCategories();
+      const currentSettings = localStore.getSettings();
+
+      const res = await fetch(`${API_BASE}/sync-all`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
+        body: JSON.stringify({
+          news: currentNews,
+          users: currentUsers,
+          categories: currentCategories,
+          settings: currentSettings
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        return { success: true, message: 'সফলভাবে সার্ভারে সংরক্ষিত হয়েছে', totalNews: data.totalNews };
+      }
+      return { success: false, message: 'সার্ভার রেসপন্স দেয়নি' };
+    } catch (err: any) {
+      return { success: false, message: err.message || 'সিঙ্ক ব্যর্থ হয়েছে' };
+    }
+  },
+
+  async batchSaveNews(news: NewsItem[]): Promise<boolean> {
+    try {
+      const res = await fetch(`${API_BASE}/news/batch-save`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
+        body: JSON.stringify({ news })
+      });
+      return res.ok;
+    } catch {
+      return false;
+    }
   },
 
   async getMe(): Promise<{ user: any }> {

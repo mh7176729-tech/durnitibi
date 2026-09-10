@@ -135,6 +135,17 @@ export default function App() {
   useEffect(() => {
     const initData = async () => {
       try {
+        // Auto-Sync: If this client device has user-published news or edits, sync to server
+        const localNews = localStore.getNews({ status: 'all' }).news;
+        const hasCustomNews =
+          localNews.length > 0 &&
+          (localNews.length !== 7 ||
+            localNews.some(n => !n.id.startsWith('news-') || parseInt(n.id.replace('news-', ''), 10) > 100));
+        
+        if (hasCustomNews) {
+          await api.syncClientToServer().catch(() => {});
+        }
+
         const [newsRes, catsRes, locsRes, adsRes, setRes] = await Promise.all([
           api.getNews({ status: 'published', limit: 50 }),
           api.getCategories(),
